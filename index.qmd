@@ -24,24 +24,38 @@ Enjoy.
 ::: {.columns style="justify-content: center; text-align: center;"}
 
 ::: {.column width="20%"}
-[![](assets/ovarium.png){width=250px}](https://vvizarddev.github.io/OVariumFortune/)  
 
-#### O Varium Fortune
-Medieval adventures in the Anno Nazarene 1400s
+<div class="card">
+<a href="https://vvizarddev.github.io/OVariumFortune/">
+<img src="assets/ovarium.png" width="250"/>
+<h4>O Varium Fortune</h4>
+</a>
+<p>Medieval adventures in the Anno Nazarene 1400s</p>
+</div>
+
 :::
 
 ::: {.column width="20%"}
-[![](assets/talesoftamriel.png){width=250px}](https://github.com/VvizardDev/TalesOfTamriel/blob/main/Tales%20of%20Tamriel.pdf)  
 
-#### Tales of Tamriel
-A Storyteller system hack for the Elder Scrolls IV: Oblivion
+<div class="card">
+<a href="https://github.com/VvizardDev/TalesOfTamriel/blob/main/Tales%20of%20Tamriel.pdf">
+<img src="assets/talesoftamriel.png" width="250"/>
+<h4>Tales of Tamriel</h4>
+</a>
+<p>A Storyteller system hack for the Elder Scrolls IV: Oblivion</p>
+</div>
+
 :::
 
 ::: {.column width="20%"}
-[![](assets/cofd.png){width=250px}](https://vvizarddev.github.io/CofGD/)  
 
-#### Chronicles of Grim Darkness (🚧 WIP 🚧)
-A Storyteller system hack for the FFG 40k RPGs Currently non-human-readable
+<div class="card">
+<a href="https://vvizarddev.github.io/CofGD/">
+<img src="assets/cofd.png" width="250"/>
+<h4>CofGD</h4>
+</a>
+</div>
+
 :::
 
 :::

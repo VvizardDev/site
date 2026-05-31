@@ -24,21 +24,21 @@ Enjoy.
 ::: {.columns style="justify-content: center; text-align: center;"}
 
 ::: {.column width="20%"}
-[![](assets/ovarium.png){width=300px}](https://vvizarddev.github.io/OVariumFortune/)  
+[![](assets/ovarium.png){width=250px}](https://vvizarddev.github.io/OVariumFortune/)  
 
 #### O Varium Fortune
 Medieval adventures in the Anno Nazarene 1400s
 :::
 
 ::: {.column width="20%"}
-[![](assets/talesoftamriel.png){width=300px}](https://github.com/VvizardDev/TalesOfTamriel/blob/main/Tales%20of%20Tamriel.pdf)  
+[![](assets/talesoftamriel.png){width=250px}](https://github.com/VvizardDev/TalesOfTamriel/blob/main/Tales%20of%20Tamriel.pdf)  
 
 #### Tales of Tamriel
 A Storyteller system hack for the Elder Scrolls IV: Oblivion
 :::
 
 ::: {.column width="20%"}
-[![](assets/cofd.png){width=300px}](https://vvizarddev.github.io/CofGD/)  
+[![](assets/cofd.png){width=250px}](https://vvizarddev.github.io/CofGD/)  
 
 #### Chronicles of Grim Darkness (🚧 WIP 🚧)
 A Storyteller system hack for the FFG 40k RPGs Currently non-human-readable

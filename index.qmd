@@ -26,16 +26,19 @@ Enjoy.
 
 ::: {.column width="10%"}
 [![](assets/ovarium.png){width=200px}](https://vvizarddev.github.io/OVariumFortune/)  
+
 O Varium Fortune
 :::
 
 ::: {.column width="10%"}
 [![](assets/talesoftamriel.png){width=200px}](https://github.com/VvizardDev/TalesOfTamriel/blob/main/Tales%20of%20Tamriel.pdf)  
+
 Tales of Tamriel
 :::
 
 ::: {.column width="10%"}
 [![](assets/cofd.png){width=200px}](https://vvizarddev.github.io/CofGD/)  
+
 Chronicles of Grim Darkness
 :::
 

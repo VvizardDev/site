@@ -52,8 +52,9 @@ Enjoy.
 <div class="card">
 <a href="https://vvizarddev.github.io/CofGD/">
 <img src="assets/cofd.png" width="250"/>
-<h4>CofGD</h4>
+<h4>CofGD (🚧WIP🚧)</h4>
 </a>
+<p>A Storyteller system hack for the FFG 40k RPGs Currently non-human-readable</P>
 </div>
 
 :::

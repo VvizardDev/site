@@ -24,17 +24,17 @@ Enjoy.
 ### RPG projects
 ::: {.columns style="justify-content: center; text-align: center;"}
 
-::: {.column width="33%"}
+::: {.column width="10%"}
 [![](assets/ovarium.png){width=100px}](https://vvizarddev.github.io/OVariumFortune/)  
 O Varium Fortune
 :::
 
-::: {.column width="33%"}
+::: {.column width="10%"}
 [![](assets/talesoftamriel.png){width=100px}](https://github.com/VvizardDev/TalesOfTamriel/blob/main/Tales%20of%20Tamriel.pdf)  
 Tales of Tamriel
 :::
 
-::: {.column width="33%"}
+::: {.column width="10%"}
 [![](assets/cofd.png){width=100px}](https://vvizarddev.github.io/CofGD/)  
 Chronicles of Grim Darkness
 :::

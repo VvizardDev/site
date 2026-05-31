@@ -21,9 +21,6 @@ Enjoy.
 ## Game Zone
 
 ### RPG projects
-::: {.columns style="justify-content: center; text-align: center;"}
-
-::: {.column width="20%"}
 
 <div class="card">
 <a href="https://vvizarddev.github.io/OVariumFortune/">
@@ -33,10 +30,6 @@ Enjoy.
 <p>Medieval adventures in the Anno Nazarene 1400s</p>
 </div>
 
-:::
-
-::: {.column width="20%"}
-
 <div class="card">
 <a href="https://github.com/VvizardDev/TalesOfTamriel/blob/main/Tales%20of%20Tamriel.pdf">
 <img src="assets/talesoftamriel.png" width="250"/>
@@ -44,10 +37,6 @@ Enjoy.
 </a>
 <p>A Storyteller system hack for the Elder Scrolls IV: Oblivion</p>
 </div>
-
-:::
-
-::: {.column width="20%"}
 
 <div class="card">
 <a href="https://vvizarddev.github.io/CofGD/">
@@ -57,9 +46,6 @@ Enjoy.
 <p>A Storyteller system hack for the FFG 40k RPGs Currently non-human-readable</P>
 </div>
 
-:::
-
-:::
 :::
 
 ::: {.retro-panel}

@@ -352,8 +352,7 @@ body::after {
   }
 
   .news-ticker {
-    margin-left: 12px;
-    margin-right: 12px;
+    display: none;
   }
 
   #quarto-content {

@@ -58,6 +58,13 @@
   #result {
     margin-top: 15px;
     font-size: 18px;
+    min-height: 24px;
+  }
+
+  button:disabled,
+  input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 </style>
 </head>
@@ -83,6 +90,7 @@
 </div>
 
 <button id="startBtn" onclick="startRace()">Start Race</button>
+<button onclick="resetGame()">Reset Bankroll</button>
 
 <div class="track">
   <div class="lane"><div id="bike0" class="bike"></div></div>
@@ -120,6 +128,13 @@ function setRaceState(isRacing) {
 
 function selectBike(i) {
   if (racing) return;
+
+  if (balance <= 0) {
+    document.getElementById("result").textContent =
+      "No credits. Reset bankroll to continue.";
+    return;
+  }
+
   selected = i;
 
   document.getElementById("result").textContent =
@@ -134,6 +149,12 @@ function resetPositions() {
 
 function startRace() {
   if (racing) return;
+
+  if (balance <= 0) {
+    document.getElementById("result").textContent =
+      "You're out of ₹. Reset bankroll to continue.";
+    return;
+  }
 
   if (selected === null) {
     alert("Pick a bike first");
@@ -198,6 +219,16 @@ function startRace() {
       }
     }
   }, 30);
+}
+
+function resetGame() {
+  balance = 100;
+  selected = null;
+
+  saveBalance();
+
+  document.getElementById("result").textContent =
+    "Bankroll reset to ₹100. Select a bike to start again.";
 }
 </script>
 

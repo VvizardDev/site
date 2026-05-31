@@ -21,8 +21,8 @@ Enjoy.
 
 ### RPG projects
 
-- [![O Varium Fortune](assets/ovarium.png){width="50px"}](https://vvizarddev.github.io/OVariumFortune/)
-- [![Chronicles of Grim Darkness](assets/ovarium.png){width="50px"}](https://vvizarddev.github.io/OVariumFortune/)
+- [![O Varium Fortune](assets/ovarium.png){width="100px"}](https://vvizarddev.github.io/OVariumFortune/)
+- [![Chronicles of Grim Darkness](assets/cofd.png){width="100px"}](https://vvizarddev.github.io/OVariumFortune/)
 :::
 
 ::: {.retro-panel}
@@ -30,7 +30,7 @@ Enjoy.
 
 ### Clickaroni
 
--[![Solstice Mirror]☀️](https://vvizarddev.github.io/solstice-mirror/)
+-[Solstice Mirror ☀️](https://vvizarddev.github.io/solstice-mirror/)
 :::
 
 ::: {.retro-panel}

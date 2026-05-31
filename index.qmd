@@ -4,45 +4,38 @@ page-layout: full
 ---
 
 ::: {.retro-panel}
-## General Discussion
+## VVelcome
+Come on in weary traveller. You have arrived safely.
 
-### Links
+**VVelcome to the VVizard Caverns.**
 
-- [Lore Archive](#)
-- [Faction Index](#)
-- [Maps](#)
-- [Downloads](#)
+A series of personal projects are linked here. Some are WIPs, some are more or less done. Most make no sense without context.
 
-Welcome to the VVizard Caverns.
+Enjoy.
+
+-Vvizarddev
 :::
 
 ::: {.retro-panel}
 ## Game Zone
 
-### Active Projects
+### RPG projects
 
-- [Campaign One](#)
-- [Campaign Two](#)
-- [Jetbike Speedway](#)
-- [Character Sheets](#)
+- [![O Varium Fortune](assets/ovarium.png){width="50px"}](https://vvizarddev.github.io/OVariumFortune/)
+- [![Chronicles of Grim Darkness](assets/ovarium.png){width="50px"}](https://vvizarddev.github.io/OVariumFortune/)
 :::
 
 ::: {.retro-panel}
-## Resources
+## Random tools
 
-### Files
+### Clickaroni
 
-- [PDF Rules](#)
-- [World Map](#)
-- [Monster Manual](#)
-- [Soundtrack](#)
+-[![Solstice Mirror]☀️](https://vvizarddev.github.io/solstice-mirror/)
 :::
 
 ::: {.retro-panel}
-## External Links
+## Da Forum
 
-- [Discord](#)
-- [Github](#)
-- [YouTube](#)
-- [Forum Archive](#)
+I basically haven't checked this in two years but have at it
+-[![Solstice Mirror]🖥️](https://tabletopheaven.proboards.com/)
 :::

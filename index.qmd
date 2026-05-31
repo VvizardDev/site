@@ -3,9 +3,12 @@ title: ""
 page-layout: full
 ---
 
+
+
 ::: {.retro-panel}
-## VVelcome
+# VVelcome
 **VVelcome to the VVizard Caverns.**
+
 Come on in weary traveller. You have arrived safely.
 
 A series of personal projects are linked here. Some are WIPs, some are more or less done. Most make no sense without context.

@@ -6,8 +6,7 @@ page-layout: full
 
 
 ::: {.retro-panel}
-# ... VV e l c o m e
-**VVelcome to the VVizard Caverns.**
+## **VVelcome to the VVizard Caverns.**
 
 Come on in weary traveller. You have arrived safely.
 

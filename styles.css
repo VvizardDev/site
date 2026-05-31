@@ -375,7 +375,7 @@ body::after {
 .card {
   padding: 12px;
   border-radius: 12px;
-  background: #1e1e1e;
+  background: transparent;
   transition: 0.2s ease;
 }
 

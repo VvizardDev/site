@@ -22,33 +22,27 @@ Enjoy.
 ## Game Zone
 
 ### RPG projects
-::: {.columns style="justify-content: center;"}
+::: {.columns style="justify-content: center; text-align: center;"}
 
 ::: {.column width="10%"}
-<div style="display: flex; flex-direction: column; align-items: center; justify-content: flex-start; height: 100%;">
-  <a href="https://vvizarddev.github.io/OVariumFortune/">
-    <img src="assets/ovarium.png" width="200px" style="display:block;" />
-  </a>
-  <div>O Varium Fortune</div>
-</div>
+[![](assets/ovarium.png){width=200px}](https://vvizarddev.github.io/OVariumFortune/)  
+
+#### O Varium Fortune
+Medieval adventures in the Anno Nazarene 1400s
 :::
 
 ::: {.column width="10%"}
-<div style="display: flex; flex-direction: column; align-items: center; justify-content: flex-start; height: 100%;">
-  <a href="https://github.com/VvizardDev/TalesOfTamriel/blob/main/Tales%20of%20Tamriel.pdf">
-    <img src="assets/talesoftamriel.png" width="200px" style="display:block;" />
-  </a>
-  <div>Tales of Tamriel</div>
-</div>
+[![](assets/talesoftamriel.png){width=200px}](https://github.com/VvizardDev/TalesOfTamriel/blob/main/Tales%20of%20Tamriel.pdf)  
+
+#### Tales of Tamriel
+A Storyteller system hack for the Elder Scrolls IV: Oblivion
 :::
 
 ::: {.column width="10%"}
-<div style="display: flex; flex-direction: column; align-items: center; justify-content: flex-start; height: 100%;">
-  <a href="https://vvizarddev.github.io/CofGD/">
-    <img src="assets/cofd.png" width="200px" style="display:block;" />
-  </a>
-  <div>Chronicles of Grim Darkness</div>
-</div>
+[![](assets/cofd.png){width=200px}](https://vvizarddev.github.io/CofGD/)  
+
+#### Chronicles of Grim Darkness
+A Storyteller system hack for the FFG 40k RPGS
 :::
 
 :::

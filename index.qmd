@@ -21,6 +21,7 @@ Enjoy.
 ## Game Zone
 
 ### RPG projects
+<div class="card-grid">
 
 <div class="card">
 <a href="https://vvizarddev.github.io/OVariumFortune/">
@@ -46,6 +47,7 @@ Enjoy.
 <p>A Storyteller system hack for the FFG 40k RPGs Currently non-human-readable</P>
 </div>
 
+</div>
 :::
 
 ::: {.retro-panel}

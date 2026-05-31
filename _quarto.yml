@@ -13,6 +13,7 @@ format:
     theme: none
     css: styles.scss
     toc: false
+    permalink: pretty
     include-before-body:
       - partials/header.html
       - partials/ticker.html

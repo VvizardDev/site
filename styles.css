@@ -1,100 +1,367 @@
-/* styles.css for Quarto */
+/* =========================================================
+   GLOBAL
+========================================================= */
 
-/* Page background */
+html,
 body {
-  background: linear-gradient(
-    135deg,
-    #003b46 0%,     /* dark cyan */
-    #00bcd4 100%   /* light cyan */
-  );
-  background-attachment: fixed;
-  color: #ffffff;
-  font-family: "Segoe UI", sans-serif;
   margin: 0;
   padding: 0;
+
+  min-height: 100%;
+
+  background-color: #005a5a;
+
+  /*
+    transparent greyscale overlay
+  */
+  background-image:
+    url("assets/bg-overlay.png");
+
+  background-repeat: repeat;
+
+  color: #bfcf9d;
+
+  font-family:
+    Verdana,
+    Tahoma,
+    sans-serif;
+
+  font-size: 14px;
+
+  image-rendering: pixelated;
 }
 
-/* Main content container */
-main,
-.content,
-.quarto-container {
-  background: rgba(0, 0, 0, 0.15);
-  backdrop-filter: blur(4px);
-  border-radius: 18px;
-  padding: 2rem;
-  margin: 2rem auto;
-  max-width: 1000px;
+/* =========================================================
+   PAGE WIDTH
+========================================================= */
+
+#quarto-content {
+  max-width: 1500px;
+
+  margin: 0 auto;
+
+  padding-left: 24px;
+  padding-right: 24px;
+  padding-bottom: 40px;
 }
 
-/* Button-style headers */
-h1, h2, h3, h4, h5, h6 {
-  display: inline-block;
-  background: linear-gradient(
-    180deg,
-    #00e5ff 0%,
-    #0097a7 100%
-  );
+/* =========================================================
+   REMOVE QUARTO UI
+========================================================= */
+
+.navbar,
+.nav-footer,
+.sidebar,
+#quarto-margin-sidebar,
+#title-block-header {
+  display: none !important;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.site-header {
+  height: 120px;
+
+  background-image:
+    linear-gradient(
+      rgba(0,0,0,.2),
+      rgba(0,0,0,.2)
+    ),
+    url("assets/header.png");
+
+  background-repeat: repeat-x;
+
+  background-size: auto 120px;
+
+  border-bottom:
+    3px solid #103838;
+
+  position: relative;
+}
+
+.site-title {
+  position: absolute;
+
+  left: 20px;
+  bottom: 18px;
+
   color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 14px;
-  border: 2px solid rgba(255,255,255,0.25);
+
+  font-size: 3rem;
+
+  font-weight: bold;
+
+  letter-spacing: 2px;
+
+  text-shadow:
+    3px 3px 0 #000,
+    0 0 8px rgba(255,255,255,.35);
+}
+
+/* =========================================================
+   TOP NAV
+========================================================= */
+
+.top-nav {
+  display: flex;
+  gap: 18px;
+
+  padding:
+    6px 16px;
+
+  background:
+    linear-gradient(
+      to bottom,
+      #145353,
+      #0a3838
+    );
+
+  border-top:
+    1px solid #3c8781;
+
+  border-bottom:
+    1px solid #021515;
+}
+
+.top-nav a {
+  color: #c6d5ab;
+
+  text-decoration: none;
+
+  font-size: 13px;
+}
+
+.top-nav a:hover {
+  color: white;
+
+  text-shadow:
+    0 0 5px rgba(255,255,255,.5);
+}
+
+/* =========================================================
+   NEWS TICKER
+========================================================= */
+
+.news-ticker {
+  display: flex;
+
+  align-items: center;
+
+  margin:
+    10px 24px 24px;
+
+  border:
+    1px solid #1f7470;
+
+  background:
+    linear-gradient(
+      to bottom,
+      #124847,
+      #082f2f
+    );
+
+  overflow: hidden;
+
   box-shadow:
-    0 4px 10px rgba(0,0,0,0.35),
-    inset 0 1px 0 rgba(255,255,255,0.25);
-  margin-top: 1.5rem;
-  margin-bottom: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.03em;
+    inset 0 0 0 1px #4c9892;
 }
 
-/* Different sizes for heading levels */
-h1 {
-  font-size: 2.5rem;
+.ticker-label {
+  flex-shrink: 0;
+
+  padding:
+    8px 14px;
+
+  background:
+    linear-gradient(
+      to bottom,
+      #2b7d77,
+      #14504d
+    );
+
+  border-right:
+    1px solid #082222;
+
+  color: #f0d77d;
+
+  font-weight: bold;
 }
 
-h2 {
-  font-size: 2rem;
+.ticker-window {
+  overflow: hidden;
+
+  width: 100%;
 }
 
-h3 {
-  font-size: 1.6rem;
+.ticker-track {
+  display: inline-block;
+
+  white-space: nowrap;
+
+  padding-left: 100%;
+
+  animation:
+    ticker-scroll 40s linear infinite;
 }
 
-h4, h5, h6 {
-  font-size: 1.2rem;
+.ticker-track span {
+  display: inline-block;
+
+  margin-right: 90px;
+
+  color: #d5d7b8;
 }
 
-/* Links */
+@keyframes ticker-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+/* =========================================================
+   PANELS
+========================================================= */
+
+.retro-panel {
+  margin-bottom: 22px;
+
+  border:
+    1px solid #1d716d;
+
+  background:
+    linear-gradient(
+      to bottom,
+      #003d3d,
+      #003232
+    );
+
+  box-shadow:
+    inset 0 0 0 1px #57918b,
+    0 0 12px rgba(0,0,0,.35);
+}
+
+/* =========================================================
+   PANEL HEADERS
+========================================================= */
+
+.retro-panel h2 {
+  margin: 0;
+
+  padding:
+    10px 14px;
+
+  background:
+    linear-gradient(
+      to bottom,
+      #2d7c76,
+      #134c49
+    );
+
+  border-bottom:
+    1px solid #082525;
+
+  color: #d9ddb3;
+
+  font-size: 16px;
+
+  letter-spacing: 1px;
+
+  text-shadow:
+    1px 1px 0 black;
+}
+
+/* =========================================================
+   PANEL CONTENT
+========================================================= */
+
+.retro-panel p,
+.retro-panel ul,
+.retro-panel ol,
+.retro-panel div,
+.retro-panel h3,
+.retro-panel h4 {
+  padding-left: 14px;
+  padding-right: 14px;
+}
+
+.retro-panel ul {
+  margin-top: 12px;
+  margin-bottom: 14px;
+}
+
+.retro-panel li {
+  margin-bottom: 6px;
+}
+
+/* =========================================================
+   LINKS
+========================================================= */
+
 a {
-  color: #d9ffff;
+  color: #9fd6cb;
+
+  text-decoration: none;
 }
 
 a:hover {
-  color: white;
-  text-shadow: 0 0 6px rgba(255,255,255,0.6);
+  color: #ffffff;
+
+  text-shadow:
+    0 0 6px rgba(255,255,255,.5);
 }
 
-/* Code blocks */
-pre, code {
-  background: rgba(0, 0, 0, 0.35);
-  border-radius: 10px;
-  color: #d8ffff;
+/* =========================================================
+   OPTIONAL CRT OVERLAY
+========================================================= */
+
+body::after {
+  content: "";
+
+  position: fixed;
+
+  inset: 0;
+
+  pointer-events: none;
+
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,.03),
+      rgba(255,255,255,.03) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+
+  mix-blend-mode: soft-light;
 }
 
-/* Tables */
-table {
-  border-collapse: collapse;
-  width: 100%;
-  background: rgba(255,255,255,0.08);
-  border-radius: 10px;
-  overflow: hidden;
-}
+/* =========================================================
+   MOBILE
+========================================================= */
 
-th {
-  background: rgba(0, 188, 212, 0.5);
-}
+@media (max-width: 700px) {
 
-th, td {
-  padding: 0.75rem;
-  border: 1px solid rgba(255,255,255,0.12);
+  .site-title {
+    font-size: 1.7rem;
+  }
+
+  .top-nav {
+    flex-wrap: wrap;
+  }
+
+  .news-ticker {
+    margin-left: 12px;
+    margin-right: 12px;
+  }
+
+  #quarto-content {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
 }

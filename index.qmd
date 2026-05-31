@@ -19,10 +19,24 @@ Enjoy.
 ## Game Zone
 
 ### RPG projects
+::: {.columns style="justify-content: center; text-align: center;"}
 
-- [![O Varium Fortune](assets/ovarium.png){width="100px"}](https://vvizarddev.github.io/OVariumFortune/) O Varium Fortune
-- [![Tales of Tamriel](assets/talesoftamriel.png){width="100px"}](https://github.com/VvizardDev/TalesOfTamriel/blob/main/Tales%20of%20Tamriel.pdf) Tales of Tamriel
-- [![Chronicles of Grim Darkness](assets/cofd.png){width="100px"}](https://vvizarddev.github.io/CofGD/) Chronicles of Grim Darkness
+::: {.column width="33%"}
+[![](assets/ovarium.png){width=100px}](https://vvizarddev.github.io/OVariumFortune/)  
+O Varium Fortune
+:::
+
+::: {.column width="33%"}
+[![](assets/talesoftamriel.png){width=100px}](https://github.com/VvizardDev/TalesOfTamriel/blob/main/Tales%20of%20Tamriel.pdf)  
+Tales of Tamriel
+:::
+
+::: {.column width="33%"}
+[![](assets/cofd.png){width=100px}](https://vvizarddev.github.io/CofGD/)  
+Chronicles of Grim Darkness
+:::
+
+:::
 :::
 
 ::: {.retro-panel}

@@ -392,6 +392,6 @@ body::after {
 .card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 300px));
-  grid-auto-rows: 350px;
+  grid-auto-rows: 400px;
   gap: 16px;
 }

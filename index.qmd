@@ -3,7 +3,7 @@ title: ""
 page-layout: full
 ---
 
-
+# Vvizarddev Projects Homepage
 
 ::: {.retro-panel}
 ## **VVelcome to the VVizard Caverns.**
@@ -23,22 +23,22 @@ Enjoy.
 ### RPG projects
 ::: {.columns style="justify-content: center; text-align: center;"}
 
-::: {.column width="10%"}
-[![](assets/ovarium.png){width=20px}](https://vvizarddev.github.io/OVariumFortune/)  
+::: {.column width="20%"}
+[![](assets/ovarium.png){width=300px}](https://vvizarddev.github.io/OVariumFortune/)  
 
 #### O Varium Fortune
 Medieval adventures in the Anno Nazarene 1400s
 :::
 
-::: {.column width="10%"}
-[![](assets/talesoftamriel.png){width=20px}](https://github.com/VvizardDev/TalesOfTamriel/blob/main/Tales%20of%20Tamriel.pdf)  
+::: {.column width="20%"}
+[![](assets/talesoftamriel.png){width=300px}](https://github.com/VvizardDev/TalesOfTamriel/blob/main/Tales%20of%20Tamriel.pdf)  
 
 #### Tales of Tamriel
 A Storyteller system hack for the Elder Scrolls IV: Oblivion
 :::
 
-::: {.column width="10%"}
-[![](assets/cofd.png){width=20px}](https://vvizarddev.github.io/CofGD/)  
+::: {.column width="20%"}
+[![](assets/cofd.png){width=300px}](https://vvizarddev.github.io/CofGD/)  
 
 #### Chronicles of Grim Darkness (🚧 WIP 🚧)
 A Storyteller system hack for the FFG 40k RPGs Currently non-human-readable

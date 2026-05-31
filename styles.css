@@ -196,14 +196,11 @@ body {
 }
 
 .ticker-track {
-  display: inline-block;
-
-  white-space: nowrap;
-
-  padding-left: 100%;
-
-  animation:
-    ticker-scroll 40s linear infinite;
+  display: flex;
+  width: max-content;
+  animation: ticker-scroll 60s linear infinite;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
 }
 
 .ticker-track span {
@@ -215,12 +212,11 @@ body {
 }
 
 @keyframes ticker-scroll {
-  from {
-    transform: translateX(0);
+  0% {
+    transform: translate3d(0, 0, 0);
   }
-
-  to {
-    transform: translateX(-100%);
+  100% {
+    transform: translate3d(-50%, 0, 0);
   }
 }
 

@@ -6,8 +6,7 @@ website:
   title: "VVizarddev"
 
   navbar: false
-  page-footer: false
-
+  
 format:
   html:
     theme: none

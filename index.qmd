@@ -6,7 +6,7 @@ page-layout: full
 
 
 ::: {.retro-panel}
-# VVelcome
+#   VVelcome
 **VVelcome to the VVizard Caverns.**
 
 Come on in weary traveller. You have arrived safely.

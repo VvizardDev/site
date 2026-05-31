@@ -51,8 +51,6 @@ A Storyteller system hack for the FFG 40k RPGS
 ::: {.retro-panel}
 ## Random tools
 
-### Clickaroni
-
 #### [**Solstice Mirror** ☀️](https://vvizarddev.github.io/solstice-mirror/)
 A tool to see which day after a solstice is the same length as today.
 :::

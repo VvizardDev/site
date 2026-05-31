@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Jetbike Racing</title>
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #0b0f1a;
+    color: white;
+    text-align: center;
+  }
+
+  h1 { margin-top: 20px; }
+
+  .hud {
+    margin: 10px;
+    font-size: 18px;
+  }
+
+  .track {
+    position: relative;
+    width: 90%;
+    height: 300px;
+    margin: 20px auto;
+    background: #111a2e;
+    border: 2px solid #2a3b5f;
+    overflow: hidden;
+  }
+
+  .lane {
+    position: relative;
+    height: 33%;
+    border-bottom: 1px dashed #2a3b5f;
+  }
+
+  .bike {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 20px;
+    border-radius: 10px;
+  }
+
+  #bike0 { background: #ff3b3b; }
+  #bike1 { background: #3bff7a; }
+  #bike2 { background: #3b8bff; }
+
+  button, input {
+    padding: 8px 12px;
+    margin: 5px;
+  }
+
+  #result {
+    margin-top: 15px;
+    font-size: 18px;
+  }
+</style>
+</head>
+
+<body>
+
+<h1>Jetbike Racing</h1>
+
+<div class="hud">
+  Balance: ₹<span id="balance">100</span>
+</div>
+
+<div>
+  <p>Choose bike:</p>
+  <button id="bike0Btn" onclick="selectBike(0)">Red</button>
+  <button id="bike1Btn" onclick="selectBike(1)">Green</button>
+  <button id="bike2Btn" onclick="selectBike(2)">Blue</button>
+</div>
+
+<div>
+  <p>Bet amount:</p>
+  <input id="bet" type="number" value="10" min="1"/>
+</div>
+
+<button id="startBtn" onclick="startRace()">Start Race</button>
+
+<div class="track">
+  <div class="lane"><div id="bike0" class="bike"></div></div>
+  <div class="lane"><div id="bike1" class="bike"></div></div>
+  <div class="lane"><div id="bike2" class="bike"></div></div>
+</div>
+
+<div id="result"></div>
+
+<script>
+let selected = null;
+let racing = false;
+
+let balance = parseInt(localStorage.getItem("balance") || "100");
+document.getElementById("balance").textContent = balance;
+
+function saveBalance() {
+  localStorage.setItem("balance", balance);
+  document.getElementById("balance").textContent = balance;
+}
+
+function setRaceState(isRacing) {
+  racing = isRacing;
+
+  document.getElementById("startBtn").disabled = isRacing;
+  document.getElementById("bet").disabled = isRacing;
+
+  document.getElementById("bike0Btn").disabled = isRacing;
+  document.getElementById("bike1Btn").disabled = isRacing;
+  document.getElementById("bike2Btn").disabled = isRacing;
+
+  document.getElementById("startBtn").textContent =
+    isRacing ? "Race in progress..." : "Start Race";
+}
+
+function selectBike(i) {
+  if (racing) return;
+  selected = i;
+
+  document.getElementById("result").textContent =
+    "Selected: " + ["Red", "Green", "Blue"][i];
+}
+
+function resetPositions() {
+  for (let i = 0; i < 3; i++) {
+    document.getElementById("bike" + i).style.left = "0px";
+  }
+}
+
+function startRace() {
+  if (racing) return;
+
+  if (selected === null) {
+    alert("Pick a bike first");
+    return;
+  }
+
+  let bet = parseInt(document.getElementById("bet").value);
+
+  if (!bet || bet <= 0) {
+    alert("Invalid bet");
+    return;
+  }
+
+  if (bet > balance) {
+    alert("Not enough ₹");
+    return;
+  }
+
+  balance -= bet;
+  saveBalance();
+
+  setRaceState(true);
+  resetPositions();
+
+  const trackWidth = document.querySelector(".track").clientWidth - 50;
+
+  let positions = [0, 0, 0];
+
+  let speeds = [
+    Math.random() * 2 + 1,
+    Math.random() * 2 + 1,
+    Math.random() * 2 + 1
+  ];
+
+  const interval = setInterval(() => {
+    for (let i = 0; i < 3; i++) {
+      positions[i] += speeds[i] + Math.random() * 2;
+
+      document.getElementById("bike" + i).style.left =
+        positions[i] + "px";
+
+      if (positions[i] >= trackWidth) {
+        clearInterval(interval);
+        setRaceState(false);
+
+        const winner = i;
+        const result = document.getElementById("result");
+
+        if (winner === selected) {
+          let winnings = bet * 2;
+          balance += winnings;
+          saveBalance();
+
+          result.textContent =
+            "🏆 Winner: " + ["Red", "Green", "Blue"][winner] +
+            " — You WON ₹" + winnings;
+        } else {
+          result.textContent =
+            "💀 Winner: " + ["Red", "Green", "Blue"][winner] +
+            " — You lost ₹" + bet;
+        }
+      }
+    }
+  }, 30);
+}
+</script>
+
+</body>
+</html>

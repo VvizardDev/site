@@ -47,12 +47,13 @@ Chronicles of Grim Darkness
 
 ### Clickaroni
 
--[**Solstice Mirror** ☀️](https://vvizarddev.github.io/solstice-mirror/)
+- [**Solstice Mirror** ☀️](https://vvizarddev.github.io/solstice-mirror/)
 :::
 
 ::: {.retro-panel}
 ## Da Forum
 
 I basically haven't checked this in two years but have at it
--[**Vvizard Caverns of the Juul Realms** 🖥️](https://tabletopheaven.proboards.com/)
+
+- [**Vvizard Caverns of the Juul Realms** 🖥️](https://tabletopheaven.proboards.com/)
 :::

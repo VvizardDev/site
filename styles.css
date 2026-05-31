@@ -352,7 +352,8 @@ body::after {
   }
 
   .news-ticker {
-    display: none;
+    margin-left: 12px;
+    margin-right: 12px;
   }
 
   #quarto-content {
@@ -387,6 +388,6 @@ body::after {
 .card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 300px));
-  grid-auto-rows: 400px;
+  grid-auto-rows: 380px;
   gap: 16px;
 }

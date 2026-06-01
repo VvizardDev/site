@@ -493,6 +493,12 @@ function initCooldownState() {
   const now = Date.now();
   const slot = getSlot(now);
 
+  if (balance <= 0) {
+    balance = 2;
+    saveBalance();
+    logMessage("Penniless, you do some mercenary work and earn ₹2");
+  }
+
   const cooldownMsg = document.getElementById("cooldownMsg");
 
   // If user already played in this slot → LOCK IMMEDIATELY

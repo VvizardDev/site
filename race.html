@@ -135,7 +135,6 @@ input:disabled {
 </div>
 
 <button id="startBtn" onclick="startRace()">Start Race</button>
-<button id="resetBtn" onclick="resetGame()">Reset Bankroll</button>
 
 <div class="track" id="track">
   <div class="finish-line"></div>
@@ -255,7 +254,7 @@ function selectBike(i) {
 
 function setRaceState(state) {
   racing = state;
-  ["startBtn","bet","bike0Btn","bike1Btn","bike2Btn","resetBtn"]
+  ["startBtn","bet","bike0Btn","bike1Btn","bike2Btn"]
     .forEach(id => document.getElementById(id).disabled = state);
 }
 
@@ -468,19 +467,6 @@ function startRace() {
     }
 
   }, 30);
-}
-
-/* =========================
-   RESET
-========================= */
-
-function resetGame() {
-  if (racing) return;
-  balance = 100;
-  selected = null;
-  saveBalance();
-  document.getElementById("result").textContent =
-    "Reset complete";
 }
 
 /* =========================

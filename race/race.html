@@ -282,7 +282,7 @@ async function loadCSVFromFile() {
 
   try {
 
-    const res = await fetch("riders.csv");
+    const res = await fetch("races/riders.csv");
 
     if (!res.ok) {
       throw new Error(`HTTP error: ${res.status}`);

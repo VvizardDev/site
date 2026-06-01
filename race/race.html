@@ -170,13 +170,11 @@ input:disabled {
 
 <button onclick="startRace()">Start Race</button>
 
-<div class="track" id="track">
-
-  <div class="finish-line"></div>
-
-</div>
-
 <div id="result"></div>
+
+<div class="track" id="track">
+  <div class="finish-line"></div>
+</div>
 
 <div id="log"></div>
 
@@ -936,14 +934,14 @@ function playRace(data, bet) {
 
         result.textContent =
           "🏆 Winner: " +
-          currentRaceRiders[winner].name +
+          currentRaceRiders[winner].racer +
           " — Won ₹" + winnings;
 
       } else {
 
         result.textContent =
           "💀 Winner: " +
-          currentRaceRiders[winner].name +
+          currentRaceRiders[winner].racer +
           " — Lost ₹" + bet;
       }
 

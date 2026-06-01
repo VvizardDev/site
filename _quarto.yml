@@ -2,7 +2,7 @@ project:
   type: website
   output-dir: site
   resources:
-   - race/riders.csv
+   - race/**
 
 website:
   title: "VVizarddev"

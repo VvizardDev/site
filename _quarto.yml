@@ -1,6 +1,8 @@
 project:
   type: website
   output-dir: site
+  resources:
+   - race/riders.csv
 
 website:
   title: "VVizarddev"

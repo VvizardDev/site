@@ -48,6 +48,11 @@ Enjoy.
 </div>
 
 </div>
+
+### Web games
+
+#### [Jetbet Racing](race/race.html)
+A prototype betting game
 :::
 
 ::: {.retro-panel}
@@ -55,9 +60,6 @@ Enjoy.
 
 #### [**Solstice Mirror** ☀️](https://vvizarddev.github.io/solstice-mirror/)
 A tool to see which day after a solstice is the same length as today.
-
-#### [Jetbet Racing](race.html)
-A prototype betting game
 :::
 
 ::: {.retro-panel}

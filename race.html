@@ -3,47 +3,33 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Jetbike Racing</title>
+
+<title>Legally Distinct Jetbike Racing</title>
 
 <style>
+
 body {
-  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
   background: #0b0f1a;
   color: white;
+  font-family: Arial, sans-serif;
   text-align: center;
 }
 
-h1 { margin-top: 20px; }
+h1 {
+  margin-bottom: 10px;
+}
 
 .track {
   position: relative;
-  width: 90%;
+  width: 95%;
+  max-width: 1000px;
   height: 300px;
   margin: 20px auto;
   background: #111a2e;
   border: 2px solid #2a3b5f;
   overflow: hidden;
-}
-
-.segment-line {
-  position: absolute;
-  top: 0;
-  width: 4px;
-  height: 100%;
-  background: rgba(255,255,255,0.25);
-  z-index: 1;
-}
-
-.segment-label {
-  position: absolute;
-  top: 5px;
-  transform: translateX(-50%);
-  font-size: 12px;
-  color: #ffd166;
-  background: rgba(0,0,0,0.6);
-  padding: 2px 6px;
-  border-radius: 4px;
-  z-index: 5;
 }
 
 .finish-line {
@@ -58,7 +44,7 @@ h1 { margin-top: 20px; }
 
 .lane {
   position: relative;
-  height: 33%;
+  height: 33.333%;
   border-bottom: 1px dashed #2a3b5f;
 }
 
@@ -77,31 +63,47 @@ h1 { margin-top: 20px; }
 #bike1 { background: #3bff7a; }
 #bike2 { background: #3b8bff; }
 
+.segment-line {
+  position: absolute;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  background: rgba(255,255,255,0.2);
+}
+
+.segment-label {
+  position: absolute;
+  top: 5px;
+  transform: translateX(-50%);
+  font-size: 12px;
+  color: #ffd166;
+  background: rgba(0,0,0,0.6);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
 button, input {
-  padding: 8px 12px;
+  padding: 10px 14px;
   margin: 5px;
+  font-size: 15px;
 }
 
 #log {
-  width: 90%;
+  width: 95%;
+  max-width: 1000px;
+  height: 180px;
+  overflow-y: auto;
   margin: 20px auto;
   background: #111a2e;
   border: 1px solid #2a3b5f;
   padding: 10px;
-  height: 180px;
-  overflow-y: auto;
   text-align: left;
 }
 
 #result {
   margin-top: 15px;
-  font-size: 18px;
-  min-height: 24px;
-}
-
-#cooldownMsg {
-  margin-top: 10px;
-  color: #ffd166;
+  font-size: 20px;
+  min-height: 30px;
 }
 
 button:disabled,
@@ -109,6 +111,7 @@ input:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
+
 </style>
 </head>
 
@@ -116,416 +119,781 @@ input:disabled {
 
 <h1>Jetbike Racing</h1>
 
-<div>Balance: ₹<span id="balance">100</span></div>
+<div>
+  Balance: ₹<span id="balance">100</span>
+</div>
 
-<div id="cooldownMsg"></div>
+<div>
+  Racetrack:
+  <span id="seedDisplay"></span>
+</div>
 
 <div id="coursePreview"></div>
 
 <div>
-  <p>Choose bike:</p>
-  <button id="bike0Btn" onclick="selectBike(0)">Red (Ground)</button>
-  <button id="bike1Btn" onclick="selectBike(1)">Green (Webway)</button>
-  <button id="bike2Btn" onclick="selectBike(2)">Blue (Air)</button>
+  <p>Select Bike:</p>
+
+  <button onclick="selectBike(0)">Red (Ground)</button>
+  <button onclick="selectBike(1)">Green (Webway)</button>
+  <button onclick="selectBike(2)">Blue (Air)</button>
 </div>
 
 <div>
-  Bet amount:
-  <input id="bet" type="number" value="10" min="1"/>
+  Bet Amount:
+  <input id="bet" type="number" min="1" value="10"/>
 </div>
 
-<button id="startBtn" onclick="startRace()">Start Race</button>
+<button onclick="startRace()">Start Race</button>
 
 <div class="track" id="track">
+
   <div class="finish-line"></div>
-  <div class="lane"><div id="bike0" class="bike"></div></div>
-  <div class="lane"><div id="bike1" class="bike"></div></div>
-  <div class="lane"><div id="bike2" class="bike"></div></div>
+
+  <div class="lane">
+    <div class="bike" id="bike0"></div>
+  </div>
+
+  <div class="lane">
+    <div class="bike" id="bike1"></div>
+  </div>
+
+  <div class="lane">
+    <div class="bike" id="bike2"></div>
+  </div>
+
 </div>
 
 <div id="result"></div>
+
 <div id="log"></div>
 
 <script>
 
-/* =========================
-   SEEDED RNG
-========================= */
+/* =========================================
+   DETERMINISTIC RNG
+========================================= */
 
-function getSeed() {
-  const d = new Date();
-  const minute = Math.floor(d.getMinutes() / 5) * 5;
+function getSeedForSlot(slot) {
+
+  const d = new Date(slot * SLOT_MS);
+
+  const minute =
+    Math.floor(d.getMinutes() / 5) * 5;
+
   return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}-${d.getHours()}-${minute}`;
 }
 
 function hashSeed(str) {
+
   let h = 2166136261;
+
   for (let i = 0; i < str.length; i++) {
+
     h ^= str.charCodeAt(i);
+
     h = Math.imul(h, 16777619);
   }
+
   return h >>> 0;
 }
 
 function mulberry32(a) {
-  return function () {
+
+  return function() {
+
     let t = a += 0x6D2B79F5;
-    t = Math.imul(t ^ (t >>> 15), t | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+
+    t = Math.imul(
+      t ^ (t >>> 15),
+      t | 1
+    );
+
+    t ^= t + Math.imul(
+      t ^ (t >>> 7),
+      t | 61
+    );
+
+    return (
+      ((t ^ (t >>> 14)) >>> 0)
+      / 4294967296
+    );
+  }
+}
+
+function createRNG(seed) {
+
+  const rng =
+    mulberry32(hashSeed(seed));
+
+  return {
+    rand: () => rng(),
+    randInt: (n) =>
+      Math.floor(rng() * n)
   };
 }
 
-const rng = mulberry32(hashSeed(getSeed()));
-const rand = () => rng();
-const randInt = (n) => Math.floor(rand() * n);
+/* =========================================
+   DATA
+========================================= */
 
-/* =========================
+const SIM_DISTANCE = 1000;
+const FRAME_MS = 30;
+
+const terrainTypes = [
+  "Air",
+  "Deathtraps",
+  "Ground",
+  "Webway",
+  "Strait"
+];
+
+const racers = [
+
+  {
+    name: "Red",
+    specialty: "Ground",
+    temperament: "Speedster"
+  },
+
+  {
+    name: "Green",
+    specialty: "Webway",
+    temperament: "Combative"
+  },
+
+  {
+    name: "Blue",
+    specialty: "Air",
+    temperament: "Speedster"
+  }
+];
+
+/* =========================================
+   STATE
+========================================= */
+
+let selected = null;
+let currentCourse = [];
+let currentRaceData = null;
+
+let balance =
+  parseInt(localStorage.getItem("balance") || "100");
+
+document.getElementById("balance").textContent =
+  balance;
+
+/* =========================================
    SLOT SYSTEM
-========================= */
+========================================= */
 
-const SLOT = 5 * 60 * 1000;
+const SLOT_MS = 5 * 60 * 1000;
 
-function getSlot(now) {
-  return Math.floor(now / SLOT);
+function getSlot(now = Date.now()) {
+  return Math.floor(now / SLOT_MS);
 }
 
 function getNextSlotTime() {
-  const now = Date.now();
-  const slot = getSlot(now);
-  return (slot + 1) * SLOT;
+  return (getSlot() + 1) * SLOT_MS;
 }
 
 function getCooldownRemaining() {
-  return Math.max(0, getNextSlotTime() - Date.now());
+  return Math.max(
+    0,
+    getNextSlotTime() - Date.now()
+  );
 }
 
-let lastBetSlot = parseInt(localStorage.getItem("lastBetSlot") || "-1");
-
-/* =========================
-   DATA
-========================= */
-
-const terrainTypes = ["Air","Deathtraps","Ground","Webway","Strait"];
-
-const racers = [
-  { name: "Red", specialty: "Ground", temperament: "Speedster" },
-  { name: "Green", specialty: "Webway", temperament: "Combative" },
-  { name: "Blue", specialty: "Air", temperament: "Speedster" }
-];
-
-/* =========================
-   STATE
-========================= */
-
-let balance = parseInt(localStorage.getItem("balance") || "100");
-document.getElementById("balance").textContent = balance;
-
-let selected = null;
-let racing = false;
-let currentCourse = [];
-
-const turboUntil = [0,0,0];
-const stunUntil = [0,0,0];
+let lastBetSlot =
+  parseInt(
+    localStorage.getItem("lastBetSlot") || "-1"
+  );
 
 let cooldownInterval = null;
+let racing = false;
 
-/* =========================
-   CORE HELPERS
-========================= */
+/* =========================================
+   HELPERS
+========================================= */
 
 function saveBalance() {
+
   localStorage.setItem("balance", balance);
-  document.getElementById("balance").textContent = balance;
+
+  document.getElementById("balance").textContent =
+    balance;
 }
 
 function logMessage(msg) {
+
   const log = document.getElementById("log");
+
   log.innerHTML += msg + "<br>";
+
   log.scrollTop = log.scrollHeight;
 }
 
 function selectBike(i) {
-  if (racing) return;
+
   selected = i;
+
   document.getElementById("result").textContent =
     "Selected: " + racers[i].name;
 }
 
-function setRaceState(state) {
-  racing = state;
-  ["startBtn","bet","bike0Btn","bike1Btn","bike2Btn"]
-    .forEach(id => document.getElementById(id).disabled = state);
-}
-
 function resetPositions() {
+
   for (let i = 0; i < 3; i++) {
-    document.getElementById("bike" + i).style.left = "0px";
+
+    document.getElementById("bike" + i).style.left =
+      "0px";
   }
 }
 
-/* =========================
-   COOLDOWN UI
-========================= */
+function setRaceState(state) {
+
+  racing = state;
+
+  document
+    .querySelectorAll("button,input")
+    .forEach(el => {
+      el.disabled = state;
+    });
+}
 
 function applyCooldownUI() {
+
   setRaceState(true);
+
   updateCooldownMessage();
 
-  if (cooldownInterval) clearInterval(cooldownInterval);
+  if (cooldownInterval) {
+    clearInterval(cooldownInterval);
+  }
 
-  cooldownInterval = setInterval(updateCooldownMessage, 1000);
+  cooldownInterval =
+    setInterval(
+      updateCooldownMessage,
+      1000
+    );
 }
 
 function updateCooldownMessage() {
-  const remaining = getCooldownRemaining();
-  const mins = Math.ceil(remaining / 60000);
 
-  const msg = document.getElementById("cooldownMsg");
+  const remaining =
+    getCooldownRemaining();
+
+  const mins =
+    Math.ceil(remaining / 60000);
+
+  let el =
+    document.getElementById("cooldown");
+
+  if (!el) {
+
+    el = document.createElement("div");
+
+    el.id = "cooldown";
+
+    el.style.marginTop = "10px";
+
+    el.style.color = "#ffd166";
+
+    document.body.insertBefore(
+      el,
+      document.querySelector(".track")
+    );
+  }
 
   if (remaining <= 0) {
-    msg.textContent = "";
+
+    el.textContent = "";
+
     clearInterval(cooldownInterval);
+
     cooldownInterval = null;
+
     setRaceState(false);
+
     return;
   }
 
-  msg.textContent =
+  el.textContent =
     `refresh this page in ${mins} minutes for the next race`;
 }
 
-/* =========================
+/* =========================================
    COURSE
-========================= */
+========================================= */
 
-function generateCourse() {
-  const count = randInt(2) + 3;
+function generateCourse(seed) {
+
+  const rng = createRNG(seed);
+
   currentCourse = [];
 
+  const count =
+    rng.randInt(2) + 3;
+
   for (let i = 0; i < count; i++) {
-    currentCourse.push(terrainTypes[randInt(terrainTypes.length)]);
+
+    currentCourse.push(
+      terrainTypes[
+        rng.randInt(terrainTypes.length)
+      ]
+    );
   }
 
-  renderTrackSegments(currentCourse);
+  renderTrackSegments();
 }
 
-function renderTrackSegments(segments) {
-  const track = document.getElementById("track");
+function renderTrackSegments() {
 
-  document.querySelectorAll(".segment-line,.segment-label")
-    .forEach(e => e.remove());
+  const track =
+    document.getElementById("track");
 
-  const finishX = track.clientWidth - 40;
-  const segmentWidth = finishX / segments.length;
+  document
+    .querySelectorAll(".segment-line,.segment-label")
+    .forEach(el => el.remove());
 
-  segments.forEach((seg, i) => {
+  const visualWidth =
+    track.clientWidth - 40;
+
+  const segmentWidth =
+    visualWidth / currentCourse.length;
+
+  currentCourse.forEach((seg, i) => {
+
     const x = segmentWidth * (i + 1);
 
     const line = document.createElement("div");
+
     line.className = "segment-line";
+
     line.style.left = x + "px";
+
     track.appendChild(line);
 
     const label = document.createElement("div");
+
     label.className = "segment-label";
-    label.style.left = (x - segmentWidth / 2) + "px";
+
+    label.style.left =
+      (x - segmentWidth / 2) + "px";
+
     label.textContent = seg;
+
     track.appendChild(label);
   });
 }
 
-/* =========================
-   RACE
-========================= */
+/* =========================================
+   PURE DETERMINISTIC SIMULATION
+========================================= */
 
-function startRace() {
-  if (racing) return;
-  if (selected === null) return;
+function simulateRace(seed) {
 
-  const now = Date.now();
-  const slot = getSlot(now);
+  const rng = createRNG(seed);
 
-  if (slot === lastBetSlot) {
-    applyCooldownUI();
-    return;
-  }
+  const positions = [0,0,0];
 
-  let bet = parseInt(document.getElementById("bet").value);
-  if (!bet || bet > balance) return;
+  const turboUntil = [0,0,0];
+  const stunUntil = [0,0,0];
 
-  lastBetSlot = slot;
-  localStorage.setItem("lastBetSlot", lastBetSlot);
+  const baseSpeeds = [
 
-  balance -= bet;
-  saveBalance();
-
-  setRaceState(true);
-  resetPositions();
-  document.getElementById("log").innerHTML = "";
-
-  const trackWidth = document.querySelector(".track").clientWidth - 90;
-  const positions = [0, 0, 0];
-
-  const speeds = [
-    rand() * 1.5 + 1.5,
-    rand() * 1.5 + 1.5,
-    rand() * 1.5 + 1.5
+    rng.rand() * 1.5 + 1.5,
+    rng.rand() * 1.5 + 1.5,
+    rng.rand() * 1.5 + 1.5
   ];
 
-  const raceSegments = [...currentCourse];
-  const segmentWidth = trackWidth / raceSegments.length;
+  const segmentSize =
+    SIM_DISTANCE / currentCourse.length;
 
-  let currentSegment = 0;
+  const frames = [];
 
-  const interval = setInterval(() => {
+  const eventLog = [];
 
-    const terrain = raceSegments[currentSegment];
+  let winner = null;
+
+  for (let tick = 0; tick < 5000; tick++) {
+
+    const currentLeader =
+      Math.max(...positions);
+
+    const segmentIndex =
+      Math.min(
+        Math.floor(currentLeader / segmentSize),
+        currentCourse.length - 1
+      );
+
+    const terrain =
+      currentCourse[segmentIndex];
 
     for (let i = 0; i < 3; i++) {
 
-      if (Date.now() < stunUntil[i]) continue;
+      if (tick < stunUntil[i]) {
+        continue;
+      }
 
-      let speed = speeds[i] + rand() * 1.2;
+      let speed =
+        baseSpeeds[i] +
+        rng.rand() * 1.2;
 
-      if (racers[i].temperament === "Speedster") {
-        if (randInt(90) === 0) {
-          turboUntil[i] = Date.now() + 400;
-          logMessage("⚡ " + racers[i].name + " TURBO!");
+      /* TURBO */
+
+      if (
+        racers[i].temperament ===
+        "Speedster"
+      ) {
+
+        if (rng.randInt(90) === 0) {
+
+          turboUntil[i] = tick + 14;
+
+          eventLog.push({
+            tick,
+            msg:
+              "⚡ " +
+              racers[i].name +
+              " TURBO!"
+          });
         }
       }
 
-      if (Date.now() < turboUntil[i]) {
-        speed *= 1.35;
+      if (tick < turboUntil[i]) {
+        speed *= 1.5;
       }
 
-      if (racers[i].specialty === terrain) {
+      /* TERRAIN BONUS */
+
+      if (
+        racers[i].specialty === terrain
+      ) {
         speed += 1.8;
       }
 
-      if (racers[i].temperament === "Combative") {
-        if (randInt(110) === 0) {
+      /* STRAIT */
+
+      if (terrain === "Strait") {
+        speed *= 1.15;
+      }
+
+      /* DEATHTRAPS */
+
+      if (terrain === "Deathtraps") {
+
+        if (rng.randInt(140) === 0) {
+
+          stunUntil[i] = tick + 28;
+
+          positions[i] *= 0.82;
+
+          eventLog.push({
+            tick,
+            msg:
+              "💥 " +
+              racers[i].name +
+              " hits a deathtrap!"
+          });
+
+        } else if (
+          rng.randInt(50) === 0
+        ) {
+
+          speed *= 0.55;
+
+          eventLog.push({
+            tick,
+            msg:
+              "☠ " +
+              racers[i].name +
+              " struggles through traps"
+          });
+        }
+      }
+
+      /* ATTACK */
+
+      if (
+        racers[i].temperament ===
+        "Combative"
+      ) {
+
+        if (rng.randInt(110) === 0) {
+
           let target = -1;
           let best = Infinity;
 
           for (let j = 0; j < 3; j++) {
+
             if (j === i) continue;
-            const d = Math.abs(positions[j] - positions[i]);
+
+            const d =
+              Math.abs(
+                positions[j] -
+                positions[i]
+              );
+
             if (d < best) {
+
               best = d;
               target = j;
             }
           }
 
           if (target !== -1) {
-            stunUntil[target] = Date.now() + 300;
-            logMessage("⚔ " + racers[i].name + " attacks " + racers[target].name);
+
+            stunUntil[target] =
+              tick + 10;
+
+            eventLog.push({
+              tick,
+              msg:
+                "⚔ " +
+                racers[i].name +
+                " attacks " +
+                racers[target].name
+            });
           }
         }
       }
 
-      const accel = Math.min(1, positions[i] / 220 + 0.35);
+      /* ACCELERATION */
+
+      const accel =
+        Math.min(
+          1,
+          positions[i] / 220 + 0.35
+        );
+
       speed *= accel;
 
       positions[i] += speed;
 
-      document.getElementById("bike" + i).style.left =
-        positions[i] + "px";
-
-      if (positions[i] >= trackWidth) {
-
-        clearInterval(interval);
-        setRaceState(false);
-
-        const winner = i;
-
-        if (winner === selected) {
-          const winnings = bet * 2;
-          balance += winnings;
-          saveBalance();
-
-          document.getElementById("result").textContent =
-            "🏆 Winner: " + racers[winner].name + " — Won ₹" + winnings;
-
-        } else {
-          document.getElementById("result").textContent =
-            "💀 Winner: " + racers[winner].name + " — Lost ₹" + bet;
-        }
-
-        return;
+      if (
+        positions[i] >= SIM_DISTANCE &&
+        winner === null
+      ) {
+        winner = i;
       }
     }
 
-    const leader = Math.max(...positions);
-    const nextSegment = Math.min(
-      Math.floor(leader / segmentWidth),
-      raceSegments.length - 1
+    frames.push({
+      positions: [...positions]
+    });
+
+    if (winner !== null) {
+      break;
+    }
+  }
+
+  return {
+    frames,
+    winner,
+    eventLog
+  };
+}
+
+/* =========================================
+   VISUAL REPLAY
+========================================= */
+
+function playRace(data, bet) {
+
+  const visualWidth =
+    document.querySelector(".track")
+      .clientWidth - 90;
+
+  let frameIndex = 0;
+
+  const result =
+    document.getElementById("result");
+
+  result.textContent = "";
+
+  document.getElementById("log").innerHTML = "";
+
+  function renderFrame() {
+
+    if (frameIndex >= data.frames.length) {
+
+      const winner = data.winner;
+
+      if (winner === selected) {
+
+        const winnings = bet * 2;
+
+        balance += winnings;
+
+        saveBalance();
+
+        result.textContent =
+          "🏆 Winner: " +
+          racers[winner].name +
+          " — Won ₹" + winnings;
+
+      } else {
+
+        result.textContent =
+          "💀 Winner: " +
+          racers[winner].name +
+          " — Lost ₹" + bet;
+      }
+
+      applyCooldownUI();
+
+      return;
+    }
+
+    const frame =
+      data.frames[frameIndex];
+
+    /* POSITIONS */
+
+    for (let i = 0; i < 3; i++) {
+
+      const renderX =
+        (frame.positions[i] / SIM_DISTANCE)
+        * visualWidth;
+
+      document.getElementById("bike" + i)
+        .style.left = renderX + "px";
+    }
+
+    /* EVENTS */
+
+    data.eventLog
+      .filter(e => e.tick === frameIndex)
+      .forEach(e => logMessage(e.msg));
+
+    frameIndex++;
+
+    setTimeout(() => {
+      requestAnimationFrame(renderFrame);
+    }, FRAME_MS);
+  }
+
+  renderFrame();
+}
+
+/* =========================================
+   START RACE
+========================================= */
+
+function startRace() {
+
+  if (racing) {
+    return;
+  }
+
+  if (selected === null) {
+    return;
+  }
+
+  const slot = getSlot();
+
+  /* LOCK */
+
+  if (slot === lastBetSlot) {
+
+    applyCooldownUI();
+
+    return;
+  }
+
+  const bet =
+    parseInt(
+      document.getElementById("bet").value
     );
 
-    if (nextSegment !== currentSegment) {
-      currentSegment = nextSegment;
-    }
+  if (!bet || bet > balance) {
+    return;
+  }
 
-  }, 30);
+  const seed =
+    getSeedForSlot(slot);
+
+  /* SAME SHARED RACE */
+
+  generateCourse(seed);
+
+  currentRaceData =
+    simulateRace(seed);
+
+  /* LOCK SLOT */
+
+  lastBetSlot = slot;
+
+  localStorage.setItem(
+    "lastBetSlot",
+    lastBetSlot
+  );
+
+  balance -= bet;
+
+  saveBalance();
+
+  resetPositions();
+
+  setRaceState(true);
+
+  playRace(currentRaceData, bet);
 }
 
-/* =========================
+/* =========================================
    INIT
-========================= */
+========================================= */
 
-generateCourse();
+/* =========================================
+   INIT
+========================================= */
 
-function initCooldownState() {
-  const now = Date.now();
-  const slot = getSlot(now);
+/* POVERTY RECOVERY */
 
-  if (balance <= 0) {
-    balance = 2;
-    saveBalance();
-    logMessage("Penniless, you do some mercenary work and earn ₹2");
-  }
+if (balance <= 0) {
 
-  const cooldownMsg = document.getElementById("cooldownMsg");
+  balance = 2;
 
-  // If user already played in this slot → LOCK IMMEDIATELY
-  if (slot === lastBetSlot) {
-    setRaceState(true); // instant UI lock
+  saveBalance();
 
-    // show message immediately (no delay)
-    const remaining = getCooldownRemaining();
-    const mins = Math.ceil(remaining / 60000);
+  setTimeout(() => {
 
-    cooldownMsg.textContent =
-      `refresh this page in ${mins} minutes for the next race`;
+    logMessage(
+      "Penniless, you do some mercenary work and earn ₹2"
+    );
 
-    // start live countdown
-    if (cooldownInterval) clearInterval(cooldownInterval);
-
-    cooldownInterval = setInterval(() => {
-      const remainingNow = getCooldownRemaining();
-
-      if (remainingNow <= 0) {
-        cooldownMsg.textContent = "";
-        clearInterval(cooldownInterval);
-        cooldownInterval = null;
-        setRaceState(false);
-        return;
-      }
-
-      const minsNow = Math.ceil(remainingNow / 60000);
-      cooldownMsg.textContent =
-        `refresh this page in ${minsNow} minutes for the next race`;
-
-    }, 1000);
-  } else {
-    // ensure clean state if slot is new
-    setRaceState(false);
-    cooldownMsg.textContent = "";
-  }
+  }, 50);
 }
 
-initCooldownState();
+const initSlot =
+  getSlot();
+
+const initSeed =
+  getSeedForSlot(initSlot);
+
+document.getElementById(
+  "seedDisplay"
+).textContent = initSeed;
+
+/* shared race generation */
+
+generateCourse(initSeed);
+
+currentRaceData =
+  simulateRace(initSeed);
+
+/* restore lock state */
+
+if (initSlot === lastBetSlot) {
+  applyCooldownUI();
+}
+
+window.addEventListener(
+  "resize",
+  renderTrackSegments
+);
 
 </script>
+
 </body>
 </html>

@@ -59,10 +59,6 @@ h1 {
   z-index: 10;
 }
 
-#bike0 { background: #ff3b3b; }
-#bike1 { background: #3bff7a; }
-#bike2 { background: #3b8bff; }
-
 .segment-line {
   position: absolute;
   top: 0;
@@ -133,9 +129,7 @@ input:disabled {
 <div>
   <p>Select Bike:</p>
 
-  <button onclick="selectBike(0)">Red (Ground)</button>
-  <button onclick="selectBike(1)">Green (Webway)</button>
-  <button onclick="selectBike(2)">Blue (Air)</button>
+  <div id="bikeButtons"></div>
 </div>
 
 <div>
@@ -148,18 +142,6 @@ input:disabled {
 <div class="track" id="track">
 
   <div class="finish-line"></div>
-
-  <div class="lane">
-    <div class="bike" id="bike0"></div>
-  </div>
-
-  <div class="lane">
-    <div class="bike" id="bike1"></div>
-  </div>
-
-  <div class="lane">
-    <div class="bike" id="bike2"></div>
-  </div>
 
 </div>
 
@@ -232,6 +214,35 @@ function createRNG(seed) {
   };
 }
 
+function buildBikeButtons() {
+
+  const container =
+    document.getElementById("bikeButtons");
+
+  container.innerHTML = "";
+
+  racers.forEach((racer, i) => {
+
+    const btn =
+      document.createElement("button");
+
+    btn.textContent =
+      `${racer.name} (${racer.specialty})`;
+
+    btn.onclick = () => selectBike(i);
+
+    btn.style.background =
+      racer.color;
+
+    btn.style.color =
+      racer.color === "#ffffff"
+        ? "black"
+        : "white";
+
+    container.appendChild(btn);
+  });
+}
+
 /* =========================================
    DATA
 ========================================= */
@@ -252,19 +263,85 @@ const racers = [
   {
     name: "Red",
     specialty: "Ground",
-    temperament: "Speedster"
+    temperament: "Speedster",
+    color: "#ff3b3b"
   },
 
   {
     name: "Green",
     specialty: "Webway",
-    temperament: "Combative"
+    temperament: "Combative",
+    color: "#3bff7a"
   },
 
   {
     name: "Blue",
     specialty: "Air",
-    temperament: "Speedster"
+    temperament: "Speedster",
+    color: "#3b8bff"
+  },
+
+  {
+    name: "Gold",
+    specialty: "Strait",
+    temperament: "Balanced",
+    color: "#ffd166"
+  },
+
+  {
+    name: "Purple",
+    specialty: "Deathtraps",
+    temperament: "Aggressive",
+    color: "#c77dff"
+  },
+
+  {
+    name: "Orange",
+    specialty: "Ground",
+    temperament: "Balanced",
+    color: "#ff9f1c"
+  },
+
+  {
+    name: "White",
+    specialty: "Air",
+    temperament: "Speedster",
+    color: "#ffffff"
+  },
+
+  {
+    name: "Black",
+    specialty: "Deathtraps",
+    temperament: "Combative",
+    color: "#555555"
+  },
+
+  {
+    name: "Pink",
+    specialty: "Webway",
+    temperament: "Balanced",
+    color: "#ff70a6"
+  },
+
+  {
+    name: "Cyan",
+    specialty: "Strait",
+    temperament: "Speedster",
+    color: "#70e4ef"
+  },
+
+  {
+    name: "Silver",
+    specialty: "Ground",
+    temperament: "Combative",
+    color: "#bfc0c0"
+  },
+
+  {
+    name: "Lime",
+    specialty: "Air",
+    temperament: "Balanced",
+    color: "#9ef01a"
   }
 ];
 
@@ -323,6 +400,40 @@ function saveBalance() {
     balance;
 }
 
+function buildTrack() {
+
+  const track =
+    document.getElementById("track");
+
+  track.innerHTML =
+    `<div class="finish-line"></div>`;
+
+  racers.forEach((racer, i) => {
+
+    const lane =
+      document.createElement("div");
+
+    lane.className = "lane";
+
+    lane.style.height =
+      `${100 / racers.length}%`;
+
+    const bike =
+      document.createElement("div");
+
+    bike.className = "bike";
+
+    bike.id = "bike" + i;
+
+    bike.style.background =
+      racer.color;
+
+    lane.appendChild(bike);
+
+    track.appendChild(lane);
+  });
+}
+
 function logMessage(msg) {
 
   const log = document.getElementById("log");
@@ -342,7 +453,7 @@ function selectBike(i) {
 
 function resetPositions() {
 
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < racers.length; i++) {
 
     document.getElementById("bike" + i).style.left =
       "0px";
@@ -494,17 +605,19 @@ function simulateRace(seed) {
 
   const rng = createRNG(seed);
 
-  const positions = [0,0,0];
+const positions =
+  Array(racers.length).fill(0);
 
-  const turboUntil = [0,0,0];
-  const stunUntil = [0,0,0];
+const turboUntil =
+  Array(racers.length).fill(0);
 
-  const baseSpeeds = [
+const stunUntil =
+  Array(racers.length).fill(0);
 
-    rng.rand() * 1.5 + 1.5,
-    rng.rand() * 1.5 + 1.5,
+const baseSpeeds =
+  racers.map(() =>
     rng.rand() * 1.5 + 1.5
-  ];
+  );
 
   const segmentSize =
     SIM_DISTANCE / currentCourse.length;
@@ -529,7 +642,7 @@ function simulateRace(seed) {
     const terrain =
       currentCourse[segmentIndex];
 
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < racers.length; i++) {
 
       if (tick < stunUntil[i]) {
         continue;
@@ -624,7 +737,7 @@ function simulateRace(seed) {
           let target = -1;
           let best = Infinity;
 
-          for (let j = 0; j < 3; j++) {
+          for (let j = 0; j < racers.length; j++) {
 
             if (j === i) continue;
 
@@ -750,7 +863,7 @@ function playRace(data, bet) {
 
     /* POSITIONS */
 
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < racers.length; i++) {
 
       const renderX =
         (frame.positions[i] / SIM_DISTANCE)
@@ -844,10 +957,6 @@ function startRace() {
    INIT
 ========================================= */
 
-/* =========================================
-   INIT
-========================================= */
-
 /* POVERTY RECOVERY */
 
 if (balance <= 0) {
@@ -865,6 +974,8 @@ if (balance <= 0) {
   }, 50);
 }
 
+buildBikeButtons();
+
 const initSlot =
   getSlot();
 
@@ -874,6 +985,8 @@ const initSeed =
 document.getElementById(
   "seedDisplay"
 ).textContent = initSeed;
+
+buildTrack();
 
 /* shared race generation */
 

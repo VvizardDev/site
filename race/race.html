@@ -3,31 +3,87 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-<title>Legally Distinct Jetbike Racing</title>
+<title>REAVER: Jetbike Racing</title>
 
 <style>
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
   padding: 20px;
-  background: #0b0f1a;
+  background-image: url("bg.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   color: white;
   font-family: Arial, sans-serif;
   text-align: center;
 }
 
-h1 {
-  margin-bottom: 10px;
+h1 { margin-bottom: 4px; }
+
+.subtitle {
+//  color: #7a8baa;
+  color: #ffffff;
+  font-size: 13px;
+  margin-bottom: 16px;
 }
 
+/* ── PHASE BANNER ── */
+#phaseBanner {
+  display: inline-block;
+  padding: 6px 20px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  margin-bottom: 14px;
+}
+#phaseBanner.betting {
+  background: #1a3a1a;
+  color: #44dd44;
+  border: 1px solid #33aa33;
+}
+#phaseBanner.replay {
+  background: #2a1a00;
+  color: #ffaa22;
+  border: 1px solid #aa6600;
+}
+
+/* ── COUNTDOWN ── */
+#countdown {
+  font-size: 14px;
+  color: #ffd166;
+  margin-bottom: 10px;
+  min-height: 20px;
+}
+
+/* ── BALANCE ── */
+#balanceBox {
+  font-size: 28px;
+  font-weight: bold;
+  color: #ffd166;
+  margin: 6px 0;
+}
+
+#fundsMessage {
+  font-size: 14px;
+  color: #ff4d4d;
+  font-weight: bold;
+  min-height: 18px;
+  margin-bottom: 4px;
+}
+
+/* ── TRACK ── */
 .track {
   position: relative;
   width: 95%;
   max-width: 1000px;
-  margin: 20px auto;
+  margin: 14px auto;
   background: #111a2e;
   border: 2px solid #2a3b5f;
+  min-height: 40px;
+  overflow: hidden;
 }
 
 .finish-line {
@@ -37,12 +93,11 @@ h1 {
   width: 6px;
   height: 100%;
   background: white;
-  z-index: 2;
+  z-index: 3;
 }
 
 .lane {
   position: relative;
-  min-height: 30px;
   border-bottom: 1px dashed #2a3b5f;
 }
 
@@ -58,1019 +113,931 @@ h1 {
   object-fit: contain;
 }
 
+.segment-bg {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  z-index: 0;
+}
+
 .segment-line {
   position: absolute;
   top: 0;
   width: 4px;
   height: 100%;
-  background: rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.15);
+  z-index: 1;
 }
 
 .segment-label {
   position: absolute;
   top: 5px;
   transform: translateX(-50%);
-  font-size: 12px;
+  font-size: 11px;
   color: #ffd166;
-  background: rgba(0,0,0,0.6);
-  padding: 2px 6px;
+  background: rgba(0,0,0,0.65);
+  padding: 2px 5px;
   border-radius: 4px;
+  z-index: 2;
+  pointer-events: none;
 }
 
-button, input {
-  padding: 10px 14px;
-  margin: 5px;
-  font-size: 15px;
-}
-
-#log {
+/* ── STACKED LAYOUT ── */
+.panels {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
   width: 95%;
   max-width: 1000px;
-  height: 180px;
-  overflow-y: auto;
-  margin: 20px auto;
+  margin: 10px auto;
+}
+
+/* ── REPLAY PANEL ── */
+.replay-panel {
   background: #111a2e;
   border: 1px solid #2a3b5f;
-  padding: 10px;
+  border-radius: 8px;
+  padding: 12px;
   text-align: left;
 }
 
+.replay-panel h3 {
+  margin: 0 0 8px 0;
+  font-size: 13px;
+  color: #7a8baa;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ── BET PANEL ── */
+.bet-panel {
+  background: #111a2e;
+  border: 1px solid #2a3b5f;
+  border-radius: 8px;
+  padding: 12px;
+  text-align: left;
+}
+
+.bet-panel h3 {
+  margin: 0 0 8px 0;
+  font-size: 13px;
+  color: #7a8baa;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ── BET PANEL INNER: bike cards in a uniform grid ── */
 #bikeButtons {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 8px;
+  margin-top: 8px;
+}
+
+/* ── UPCOMING TRACK PREVIEW ── */
+#upcomingTrack {
+  position: relative;
+  width: 100%;
+  height: 30px;
+  background: #0b0f1a;
+  border: 1px solid #2a3b5f;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.bike-card {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 12px;
-  width: 95%;
-  max-width: 1000px;
-  margin: 20px auto;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #0b0f1a;
+  border: 1px solid #2a3b5f;
+  cursor: pointer;
+  transition: border-color 0.2s;
 }
 
-#bikeButtons > div {
-  flex: 0 0 180px;
+.bike-card:hover {
+  border-color: #6699cc;
 }
 
-#balanceBox {
-  font-size: 32px;
+.bike-card.selected {
+  border-color: #ffd166;
+  background: #1a1800;
+}
+
+.bike-card img {
+  width: 40px;
+  height: 32px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.bike-card .card-info {
+  flex: 1;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.bike-card .card-info strong {
+  display: block;
+  font-size: 13px;
+  color: white;
+}
+
+.bike-card .card-info span {
+  color: #7a8baa;
+}
+
+.bike-card .card-check {
+  font-size: 18px;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.bike-card.selected .card-check {
+  opacity: 1;
+}
+
+/* ── BET CONTROLS ── */
+.bet-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.bet-row label {
+  font-size: 13px;
+  color: #7a8baa;
+  white-space: nowrap;
+}
+
+.bet-row input {
+  flex: 1;
+  padding: 8px;
+  font-size: 14px;
+  background: #0b0f1a;
+  border: 1px solid #2a3b5f;
+  color: white;
+  border-radius: 6px;
+}
+
+#lockBetBtn {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  font-size: 14px;
   font-weight: bold;
-  margin: 10px 0;
-  color: #ffd166;
+  background: #1a6b2a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
   letter-spacing: 0.5px;
 }
 
-#result {
-  margin-top: 15px;
-  font-size: 20px;
-  min-height: 30px;
+#lockBetBtn:hover:not(:disabled) {
+  background: #1e8533;
 }
 
-#fundsMessage {
-  margin-top: 8px;
-  font-size: 16px;
-  color: #ff4d4d;
-  font-weight: bold;
-  min-height: 20px;
-}
-
-button:disabled,
-input:disabled {
-  opacity: 0.5;
+#lockBetBtn:disabled {
+  opacity: 0.45;
   cursor: not-allowed;
 }
 
+/* locked bet display */
+#lockedBetDisplay {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: #1a1800;
+  border: 1px solid #aa8800;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #ffd166;
+  display: none;
+}
+
+/* ── LOG ── */
+#log {
+  width: 95%;
+  max-width: 1000px;
+  height: 130px;
+  overflow-y: auto;
+  margin: 10px auto;
+  background: #111a2e;
+  border: 1px solid #2a3b5f;
+  border-radius: 6px;
+  padding: 8px 12px;
+  text-align: left;
+  font-size: 13px;
+}
+
+/* ── RESULT ── */
+#result {
+  margin: 10px 0 6px;
+  font-size: 18px;
+  min-height: 28px;
+  font-weight: bold;
+}
+
+/* ── PLAY REPLAY BUTTON ── */
+#replayBtn {
+  padding: 8px 20px;
+  background: #1a2a4a;
+  border: 1px solid #2a3b5f;
+  color: #7ab4ff;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+#replayBtn:hover { background: #1e3a60; }
+#replayBtn:disabled { opacity: 0.4; cursor: not-allowed; }
 </style>
 </head>
-
 <body>
 
-<h1>Jetbike Racing</h1>
+<h1>REAVER:<br>Jetbike Racing</h1>
+<p class="subtitle">Races run every 5 minutes. Lock in your bet before the next race starts.</p>
 
-<div id="balanceBox">
-  Balance: ₹<span id="balance">100</span>
-</div>
+<div id="phaseBanner" class="betting">BETTING OPEN</div>
+<div id="countdown">Next race in …</div>
 
+<div id="balanceBox">₹<span id="balance">100</span></div>
 <div id="fundsMessage"></div>
 
-<div>
-  Racetrack:
-  <span id="seedDisplay"></span>
+<div class="panels">
+
+  <!-- LEFT: replay of last race -->
+  <div class="replay-panel">
+    <h3>Last Race · <span id="replaySeedLabel">—</span></h3>
+    <div id="result"></div>
+    <button id="replayBtn" onclick="playStoredReplay()">▶ Replay Last Race</button>
+
+    <div class="track" id="track">
+      <div class="finish-line"></div>
+    </div>
+
+    <div id="log"></div>
+  </div>
+
+  <!-- RIGHT: upcoming race + bet -->
+  <div class="bet-panel">
+    <h3>Upcoming Race · <span id="upcomingSeedLabel">—</span></h3>
+    <p style="font-size:12px;color:#7a8baa;margin:0 0 6px 0;">Track segments:</p>
+    <div id="upcomingTrack"></div>
+    <p style="font-size:12px;color:#7a8baa;margin:0 0 4px 0;">Pick your racer:</p>
+    <div id="bikeButtons"></div>
+
+    <div class="bet-row">
+      <label>Bet ₹</label>
+      <input id="bet" type="number" min="1" value="10"/>
+    </div>
+
+    <button id="lockBetBtn" onclick="lockBet()">🔒 Lock In Bet</button>
+    <div id="lockedBetDisplay"></div>
+  </div>
 </div>
-
-<div id="coursePreview"></div>
-
-<div>
-  Bet Amount:
-  <input id="bet" type="number" min="1" value="10"/>
-</div>
-
-<div>
-  <p>Select Bike:</p>
-
-  <div id="bikeButtons"></div>
-</div>
-
-<button onclick="startRace()">Start Race</button>
-
-<div id="result"></div>
-
-<div class="track" id="track">
-  <div class="finish-line"></div>
-</div>
-
-<div id="log"></div>
 
 <script>
-
-/* =========================================
+/* =============================================
    DETERMINISTIC RNG
-========================================= */
+============================================= */
+
+const SLOT_MS = 5 * 60 * 1000;
+const SIM_DISTANCE = 1000;
+const FRAME_MS = 28;
 
 function getSeedForSlot(slot) {
-
   const d = new Date(slot * SLOT_MS);
-
-  const minute =
-    Math.floor(d.getMinutes() / 5) * 5;
-
+  const minute = Math.floor(d.getMinutes() / 5) * 5;
   return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}-${d.getHours()}-${minute}`;
 }
 
 function hashSeed(str) {
-
   let h = 2166136261;
-
   for (let i = 0; i < str.length; i++) {
-
     h ^= str.charCodeAt(i);
-
     h = Math.imul(h, 16777619);
   }
-
   return h >>> 0;
 }
 
 function mulberry32(a) {
-
   return function() {
-
     let t = a += 0x6D2B79F5;
-
-    t = Math.imul(
-      t ^ (t >>> 15),
-      t | 1
-    );
-
-    t ^= t + Math.imul(
-      t ^ (t >>> 7),
-      t | 61
-    );
-
-    return (
-      ((t ^ (t >>> 14)) >>> 0)
-      / 4294967296
-    );
-  }
-}
-
-function createRNG(seed) {
-
-  const rng =
-    mulberry32(hashSeed(seed));
-
-  return {
-    rand: () => rng(),
-    randInt: (n) =>
-      Math.floor(rng() * n)
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
 }
 
-function generateRaceRoster(seed) {
+function createRNG(seed) {
+  const rng = mulberry32(hashSeed(seed));
+  return { rand: () => rng(), randInt: (n) => Math.floor(rng() * n) };
+}
 
+/* =============================================
+   TERRAIN
+============================================= */
+
+const terrainTypes = ["Air","Deathtraps","Ground","Webway","Strait"];
+
+const terrainBackgrounds = {
+  Air:        "linear-gradient(to right, rgba(255,255,255,0.55), rgba(180,210,255,0.3))",
+  Deathtraps: "linear-gradient(to right, rgba(120,0,0,0.7), rgba(0,0,0,0.75))",
+  Ground:     "linear-gradient(to right, rgba(100,100,100,0.5), rgba(10,25,60,0.6))",
+  Webway:     "linear-gradient(to right, rgba(18,11,26,0.6), rgba(80,30,120,0.55))",
+  Strait:     "linear-gradient(to right, rgba(120,140,100,0.5), rgba(0,100,50,0.55))"
+};
+
+/* =============================================
+   STATE
+============================================= */
+
+let allRiders = [];
+let currentRaceRiders = [];   // derived from the CURRENT slot (upcoming)
+let replayRaceRiders = [];    // derived from the PREVIOUS slot (shown in replay)
+
+let selectedBiker = null;
+let replayData    = null;
+let upcomingCourse = [];
+let replayPlaying  = false;
+
+let balance = parseInt(localStorage.getItem("balance") || "100");
+
+function getSlot(now = Date.now()) { return Math.floor(now / SLOT_MS); }
+function getNextSlotTime() { return (getSlot() + 1) * SLOT_MS; }
+
+/* =============================================
+   BALANCE
+============================================= */
+
+function saveBalance() {
+  localStorage.setItem("balance", balance);
+  document.getElementById("balance").textContent = balance;
+}
+
+function showFundsMsg(msg, color="#ff4d4d") {
+  const el = document.getElementById("fundsMessage");
+  el.style.color = color;
+  el.textContent = msg;
+  setTimeout(() => { el.textContent = ""; }, 4000);
+}
+
+/* =============================================
+   CSV LOAD
+============================================= */
+
+async function loadCSVFromFile() {
+  try {
+    const res = await fetch("https://raw.githubusercontent.com/VvizardDev/site/refs/heads/main/race/riders.csv");
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const text = await res.text();
+    const lines = text.trim().split("\n").filter(Boolean);
+    const headers = lines[0].split(",").map(h => h.trim());
+    allRiders = lines.slice(1).map(line => {
+      const values = line.split(",");
+      const obj = {};
+      headers.forEach((h, i) => { obj[h] = values[i]?.trim() ?? ""; });
+      return obj;
+    });
+    init();
+  } catch(err) {
+    console.error("CSV LOAD ERROR:", err);
+    logMessage("❌ Failed to load riders — check network");
+  }
+}
+
+/* =============================================
+   ROSTER GENERATION (seeded)
+============================================= */
+
+function generateRoster(seed) {
   const rng = createRNG(seed);
-
   const teamMap = new Map();
-
   for (const r of allRiders) {
-
     const team = r.team?.trim() || "Unknown";
-
-    if (!teamMap.has(team)) {
-      teamMap.set(team, []);
-    }
-
+    if (!teamMap.has(team)) teamMap.set(team, []);
     teamMap.get(team).push(r);
   }
-
-  currentRaceRiders = Array.from(teamMap.values()).map(teamRiders => {
-
+  return Array.from(teamMap.values()).map(teamRiders => {
     const r = teamRiders[rng.randInt(teamRiders.length)];
-
     return {
-      racer: r.racer ?? r.name ?? "Unknown Rider",
-      team: r.team ?? "Unknown Team",
-      specialty: r.specialty ?? "Ground",
+      racer:       r.racer ?? r.name ?? "Unknown Rider",
+      team:        r.team  ?? "Unknown Team",
+      specialty:   r.specialty   ?? "Ground",
       temperament: r.temperament ?? "Speedster",
-      color: r.color ?? "#888888",
-      image: r.image?.trim() || "default.png",
-      profile: r.profile?.trim() || "default-profile.png"
+      color:       r.color ?? "#888888",
+      image:       r.image?.trim()   || "default.png",
+      profile:     r.profile?.trim() || "default-profile.png"
     };
   });
 }
 
-async function loadCSVFromFile() {
+/* =============================================
+   COURSE GENERATION
+============================================= */
 
-  try {
-
-    const res = await fetch("/race/riders.csv");
-
-    if (!res.ok) {
-      throw new Error(`HTTP error: ${res.status}`);
-    }
-
-    const text = await res.text();
-
-    const lines = text
-      .trim()
-      .split("\n")
-      .filter(Boolean);
-
-    const headers = lines[0]
-      .split(",")
-      .map(h => h.trim());
-
-    allRiders = lines.slice(1).map(line => {
-
-      const values = line.split(",");
-
-      const obj = {};
-
-      headers.forEach((h, i) => {
-        obj[h] = values[i]?.trim() ?? "";
-      });
-
-      return obj;
-    });
-
-    // STEP 1: get seed FIRST
-    const initSlot = getSlot();
-    const initSeed = getSeedForSlot(initSlot);
-
-    document.getElementById("seedDisplay").textContent = initSeed;
-
-    // STEP 2: build roster (seeded randomness happens inside function)
-    generateRaceRoster(initSeed);
-
-    // STEP 3: build UI
-    buildTrack();
-    buildBikeButtons();
-
-    // STEP 4: initialize race
-    generateCourse(initSeed);
-    currentRaceData = simulateRace(initSeed);
-
-  } catch (err) {
-
-    console.error("CSV LOAD ERROR:", err);
-
-    logMessage("❌ Failed to load riders.csv — check file location or server setup");
+function generateCourse(seed) {
+  const rng = createRNG(seed);
+  const course = [];
+  const count = rng.randInt(2) + 3;
+  for (let i = 0; i < count; i++) {
+    course.push(terrainTypes[rng.randInt(terrainTypes.length)]);
   }
+  return course;
 }
 
-function buildBikeButtons() {
+/* =============================================
+   SIMULATION
+============================================= */
 
-  const container =
-    document.getElementById("bikeButtons");
+function simulateRace(seed, riders) {
+  const rng = createRNG(seed);
+  const n = riders.length;
+  const positions   = Array(n).fill(0);
+  const turboUntil  = Array(n).fill(0);
+  const stunUntil   = Array(n).fill(0);
+  const baseSpeeds  = riders.map(() => rng.rand() * 1.5 + 1.5);
+  const course      = generateCourse(seed);
+  const segmentSize = SIM_DISTANCE / course.length;
+  const frames      = [];
+  const eventLog    = [];
+  let winner        = null;
 
+  for (let tick = 0; tick < 5000; tick++) {
+    const leader   = Math.max(...positions);
+    const segIdx   = Math.min(Math.floor(leader / segmentSize), course.length - 1);
+    const terrain  = course[segIdx];
+
+    for (let i = 0; i < n; i++) {
+      if (tick < stunUntil[i]) continue;
+
+      let speed = baseSpeeds[i] + rng.rand() * 1.2;
+
+      if (riders[i].temperament === "Speedster" && rng.randInt(90) === 0) {
+        turboUntil[i] = tick + 14;
+        eventLog.push({ tick, msg: "⚡ " + riders[i].racer + " TURBO!" });
+      }
+      if (tick < turboUntil[i]) speed *= 1.5;
+
+      if (riders[i].specialty === terrain) speed += 1.8;
+      if (terrain === "Strait") speed *= 1.15;
+
+      if (terrain === "Deathtraps") {
+        if (rng.randInt(140) === 0) {
+          stunUntil[i] = tick + 28;
+          positions[i] *= 0.82;
+          eventLog.push({ tick, msg: "💥 " + riders[i].racer + " hits a deathtrap!" });
+        } else if (rng.randInt(50) === 0) {
+          speed *= 0.55;
+          eventLog.push({ tick, msg: "☠ " + riders[i].racer + " struggles through traps" });
+        }
+      }
+
+      if (riders[i].temperament === "Combative" && rng.randInt(110) === 0) {
+        let target = -1, best = Infinity;
+        for (let j = 0; j < n; j++) {
+          if (j === i) continue;
+          const d = Math.abs(positions[j] - positions[i]);
+          if (d < best) { best = d; target = j; }
+        }
+        if (target !== -1) {
+          stunUntil[target] = tick + 10;
+          eventLog.push({ tick, msg: "⚔ " + riders[i].racer + " attacks " + riders[target].racer });
+        }
+      }
+
+      const accel = Math.min(1, positions[i] / 220 + 0.35);
+      speed *= accel;
+      positions[i] += speed;
+
+      if (positions[i] >= SIM_DISTANCE && winner === null) winner = i;
+    }
+
+    frames.push({ positions: [...positions] });
+    if (winner !== null) break;
+  }
+
+  return { frames, winner, eventLog };
+}
+
+/* =============================================
+   TRACK SEGMENT RENDERER (generic)
+============================================= */
+
+function renderSegments(containerId, course, height) {
+  const el = document.getElementById(containerId);
+  if (!el || !course.length) return;
+  // Only remove segment decorations — never touch .lane or .bike elements
+  el.querySelectorAll(".segment-bg, .segment-line, .segment-label").forEach(n => n.remove());
+  const w = el.clientWidth || el.offsetWidth || 300;
+  const segW = w / course.length;
+  course.forEach((seg, i) => {
+    const bg = document.createElement("div");
+    bg.className = "segment-bg";
+    bg.style.left   = (segW * i) + "px";
+    bg.style.width  = segW + "px";
+    bg.style.background = terrainBackgrounds[seg] || "#111a2e";
+    el.appendChild(bg);
+    if (i > 0) {
+      const line = document.createElement("div");
+      line.className = "segment-line";
+      line.style.left = (segW * i) + "px";
+      el.appendChild(line);
+    }
+    const label = document.createElement("div");
+    label.className = "segment-label";
+    label.style.left = (segW * i + segW / 2) + "px";
+    label.style.top = "5px";
+    label.textContent = seg;
+    el.appendChild(label);
+  });
+}
+
+/* =============================================
+   BUILD REPLAY TRACK
+============================================= */
+
+function buildReplayTrack(riders, course) {
+  const track = document.getElementById("track");
+  track.innerHTML = `<div class="finish-line"></div>`;
+  const laneH = Math.max(50, Math.min(80, 400 / riders.length));
+  riders.forEach((rider, i) => {
+    const lane = document.createElement("div");
+    lane.className = "lane";
+    lane.style.height = laneH + "px";
+    const bike = document.createElement("img");
+    bike.className = "bike";
+    bike.id = "bike" + i;
+    bike.src = rider.image || "default.png";
+    bike.onerror = function(){ this.src="default.png"; };
+    lane.appendChild(bike);
+    track.appendChild(lane);
+  });
+  track.style.height = (laneH * riders.length + 8) + "px";
+  // render segments on the main track too
+  setTimeout(() => renderSegments("track", course, null), 50);
+}
+
+/* =============================================
+   BIKE BUTTONS (upcoming race)
+============================================= */
+
+function buildBikeButtons(riders) {
+  const container = document.getElementById("bikeButtons");
   container.innerHTML = "";
+  riders.forEach((rider, i) => {
+    const card = document.createElement("div");
+    card.className = "bike-card";
+    card.id = "bikeCard" + i;
+    card.onclick = () => selectBike(i, riders);
 
-  currentRaceRiders.forEach((rider, i) => {
+    const img = document.createElement("img");
+    img.src = rider.profile || "default-profile.png";
+    img.onerror = function(){ this.src="default-profile.png"; };
 
-    const card =
-      document.createElement("div");
+    const info = document.createElement("div");
+    info.className = "card-info";
+    info.innerHTML = `<strong style="color:${rider.color}">${rider.team}</strong>
+      <span>${rider.racer}</span><br>
+      <span>${rider.specialty} · ${rider.temperament}</span>`;
 
-    // card styling for grid compatibility
-    card.style.padding = "10px";
-    card.style.borderRadius = "10px";
-    card.style.background = "#111a2e";
-    card.style.border = "1px solid #2a3b5f";
-    card.style.display = "flex";
-    card.style.flexDirection = "column";
-    card.style.gap = "6px";
+    const check = document.createElement("span");
+    check.className = "card-check";
+    check.textContent = "✓";
+    check.style.color = "#ffd166";
 
-    // PROFILE IMAGE
-    const profileImg = document.createElement("img");
-
-    profileImg.src = rider.profile
-      ? `./${rider.profile}`
-      : "./default-profile.png";
-
-    profileImg.style.width = "100%";
-    profileImg.style.height = "auto";
-    profileImg.style.maxHeight = "80px";
-    profileImg.style.objectFit = "contain";
-    profileImg.style.display = "block";
-
-    // BUTTON
-    const btn =
-      document.createElement("button");
-
-    btn.textContent = rider.team;
-
-    btn.onclick = () => selectBike(i);
-
-    btn.style.background = rider.color;
-    btn.style.color = "white";
-    btn.style.border = "none";
-    btn.style.borderRadius = "6px";
-    btn.style.padding = "10px";
-    btn.style.fontWeight = "bold";
-    btn.style.cursor = "pointer";
-    btn.style.width = "100%";
-
-    // INFO
-    const info =
-      document.createElement("div");
-
-    info.innerHTML = `
-      <div><strong>Rider:</strong> ${rider.racer}</div>
-      <div><strong>Specialty:</strong> ${rider.specialty}</div>
-      <div><strong>Temperament:</strong> ${rider.temperament}</div>
-    `;
-
-    info.style.fontSize = "13px";
-    info.style.opacity = "0.9";
-    info.style.lineHeight = "1.4";
-
-    // assemble card
-    card.appendChild(btn);
-    card.appendChild(profileImg);
+    card.appendChild(img);
     card.appendChild(info);
-
+    card.appendChild(check);
     container.appendChild(card);
   });
 }
 
-/* =========================================
-   DATA
-========================================= */
-
-const SIM_DISTANCE = 1000;
-const FRAME_MS = 30;
-
-const terrainTypes = [
-  "Air",
-  "Deathtraps",
-  "Ground",
-  "Webway",
-  "Strait"
-];
-
-const terrainBackgrounds = {
-  Air: "linear-gradient(to right, rgba(255,255,255,0.65), rgba(220,220,220,0.35))",
-  Deathtraps: "linear-gradient(to right, rgba(120,0,0,0.7), rgba(0,0,0,0.75))",
-  Ground: "linear-gradient(to right, rgba(120,120,120,0.55), rgba(10,25,60,0.65))",
-  Webway: "linear-gradient(to right, rgba(18,11,26,0.6), rgba(31,15,42,0.6))",
-  Strait: "linear-gradient(to right, rgba(140,140,140,0.5), rgba(0,120,60,0.55))"
-};
-
-let allRiders = [];
-let currentRaceRiders = [];
-
-/* =========================================
-   STATE
-========================================= */
-
-let selected = null;
-let currentCourse = [];
-let currentRaceData = null;
-
-let balance =
-  parseInt(localStorage.getItem("balance") || "100");
-
-document.getElementById("balance").textContent =
-  balance;
-
-/* =========================================
-   SLOT SYSTEM
-========================================= */
-
-const SLOT_MS = 5 * 60 * 1000;
-
-function getSlot(now = Date.now()) {
-  return Math.floor(now / SLOT_MS);
-}
-
-function getNextSlotTime() {
-  return (getSlot() + 1) * SLOT_MS;
-}
-
-function getCooldownRemaining() {
-  return Math.max(
-    0,
-    getNextSlotTime() - Date.now()
-  );
-}
-
-let lastBetSlot =
-  parseInt(
-    localStorage.getItem("lastBetSlot") || "-1"
-  );
-
-let cooldownInterval = null;
-let racing = false;
-
-/* =========================================
-   HELPERS
-========================================= */
-
-function saveBalance() {
-
-  localStorage.setItem("balance", balance);
-
-  document.getElementById("balance").textContent =
-    balance;
-}
-
-function buildTrack() {
-
-  const track =
-    document.getElementById("track");
-
-  track.innerHTML =
-    `<div class="finish-line"></div>`;
-
-  currentRaceRiders.forEach((racer, i) => {
-
-    const lane =
-      document.createElement("div");
-
-    lane.className = "lane";
-
-    lane.style.height =
-      `${100 / currentRaceRiders.length}%`;
-
-    const bike = document.createElement("img");
-    bike.className = "bike";
-    bike.id = "bike" + i;
-
-    bike.src = racer.image || "default.png";
-
-    lane.appendChild(bike);
-
-    track.appendChild(lane);
+function selectBike(i, riders) {
+  // don't allow changes once bet is locked
+  if (localStorage.getItem("pendingBet")) return;
+  selectedBiker = i;
+  document.querySelectorAll(".bike-card").forEach((c, idx) => {
+    c.classList.toggle("selected", idx === i);
   });
 }
 
-function logMessage(msg) {
+/* =============================================
+   LOCK BET
+============================================= */
 
-  const log = document.getElementById("log");
+function lockBet() {
+  const msgEl = document.getElementById("fundsMessage");
+  msgEl.textContent = "";
 
-  log.innerHTML += msg + "<br>";
-
-  log.scrollTop = log.scrollHeight;
-}
-
-function selectBike(i) {
-
-  selected = i;
-
-  document.getElementById("result").textContent =
-    "Selected: " + currentRaceRiders[i].team;
-}
-
-function resetPositions() {
-
-  for (let i = 0; i < currentRaceRiders.length; i++) {
-
-    document.getElementById("bike" + i).style.left =
-      "0px";
-  }
-}
-
-function setRaceState(state) {
-
-  racing = state;
-
-  document
-    .querySelectorAll("button,input")
-    .forEach(el => {
-      el.disabled = state;
-    });
-}
-
-function applyCooldownUI() {
-
-  setRaceState(true);
-
-  updateCooldownMessage();
-
-  if (cooldownInterval) {
-    clearInterval(cooldownInterval);
-  }
-
-  cooldownInterval =
-    setInterval(
-      updateCooldownMessage,
-      1000
-    );
-}
-
-function updateCooldownMessage() {
-
-  const remaining =
-    getCooldownRemaining();
-
-  const mins =
-    Math.ceil(remaining / 60000);
-
-  let el =
-    document.getElementById("cooldown");
-
-  if (!el) {
-
-    el = document.createElement("div");
-
-    el.id = "cooldown";
-
-    el.style.marginTop = "10px";
-
-    el.style.color = "#ffd166";
-
-    document.body.insertBefore(
-      el,
-      document.querySelector(".track")
-    );
-  }
-
-  if (remaining <= 0) {
-
-    el.textContent = "";
-
-    clearInterval(cooldownInterval);
-
-    cooldownInterval = null;
-
-    setRaceState(false);
-
+  if (selectedBiker === null) {
+    showFundsMsg("Pick a racer first!");
     return;
   }
 
-  el.textContent =
-    `refresh this page in ${mins} minutes for the next race`;
-}
+  const bet = parseInt(document.getElementById("bet").value);
+  if (!bet || bet <= 0) { showFundsMsg("Enter a valid bet amount"); return; }
+  if (bet > balance)    { showFundsMsg("❌ Insufficient funds"); return; }
 
-/* =========================================
-   COURSE
-========================================= */
-
-function generateCourse(seed) {
-
-  const rng = createRNG(seed);
-
-  currentCourse = [];
-
-  const count =
-    rng.randInt(2) + 3;
-
-  for (let i = 0; i < count; i++) {
-
-    currentCourse.push(
-      terrainTypes[
-        rng.randInt(terrainTypes.length)
-      ]
-    );
+  // existing pending bet?
+  if (localStorage.getItem("pendingBet")) {
+    showFundsMsg("Bet already locked for this race", "#ffd166");
+    return;
   }
 
-  renderTrackSegments();
-}
-
-function renderTrackSegments() {
-
-  const track = document.getElementById("track");
-
-  document
-    .querySelectorAll(".segment-line,.segment-label,.segment-bg")
-    .forEach(el => el.remove());
-
-  const visualWidth = track.clientWidth - 40;
-  const segmentWidth = visualWidth / currentCourse.length;
-
-  currentCourse.forEach((seg, i) => {
-
-    const x = segmentWidth * i;
-
-    // BACKGROUND STRIP (NEW)
-    const bg = document.createElement("div");
-    bg.className = "segment-bg";
-    bg.style.position = "absolute";
-    bg.style.left = x + "px";
-    bg.style.top = "0";
-    bg.style.width = segmentWidth + "px";
-    bg.style.height = "100%";
-    bg.style.zIndex = "0";
-    bg.style.background = terrainBackgrounds[seg] || "#111a2e";
-
-    track.appendChild(bg);
-
-    // LINE
-    const line = document.createElement("div");
-    line.className = "segment-line";
-    line.style.left = x + "px";
-    line.style.zIndex = "1";
-    track.appendChild(line);
-
-    // LABEL
-    const label = document.createElement("div");
-    label.className = "segment-label";
-    label.style.left = (x + segmentWidth / 2) + "px";
-    label.style.zIndex = "2";
-    label.textContent = seg;
-
-    track.appendChild(label);
-  });
-}
-
-/* =========================================
-   PURE DETERMINISTIC SIMULATION
-========================================= */
-
-function simulateRace(seed) {
-
-  const rng = createRNG(seed);
-
-const positions =
-  Array(currentRaceRiders.length).fill(0);
-
-const turboUntil =
-  Array(currentRaceRiders.length).fill(0);
-
-const stunUntil =
-  Array(currentRaceRiders.length).fill(0);
-
-const baseSpeeds =
-  currentRaceRiders.map(() =>
-    rng.rand() * 1.5 + 1.5
-  );
-
-  const segmentSize =
-    SIM_DISTANCE / currentCourse.length;
-
-  const frames = [];
-
-  const eventLog = [];
-
-  let winner = null;
-
-  for (let tick = 0; tick < 5000; tick++) {
-
-    const currentLeader =
-      Math.max(...positions);
-
-    const segmentIndex =
-      Math.min(
-        Math.floor(currentLeader / segmentSize),
-        currentCourse.length - 1
-      );
-
-    const terrain =
-      currentCourse[segmentIndex];
-
-    for (let i = 0; i < currentRaceRiders.length; i++) {
-
-      if (tick < stunUntil[i]) {
-        continue;
-      }
-
-      let speed =
-        baseSpeeds[i] +
-        rng.rand() * 1.2;
-
-      /* TURBO */
-
-      if (
-        currentRaceRiders[i].temperament ===
-        "Speedster"
-      ) {
-
-        if (rng.randInt(90) === 0) {
-
-          turboUntil[i] = tick + 14;
-
-          eventLog.push({
-            tick,
-            msg:
-              "⚡ " +
-              currentRaceRiders[i].racer +
-              " TURBO!"
-          });
-        }
-      }
-
-      if (tick < turboUntil[i]) {
-        speed *= 1.5;
-      }
-
-      /* TERRAIN BONUS */
-
-      if (
-        currentRaceRiders[i].specialty === terrain
-      ) {
-        speed += 1.8;
-      }
-
-      /* STRAIT */
-
-      if (terrain === "Strait") {
-        speed *= 1.15;
-      }
-
-      /* DEATHTRAPS */
-
-      if (terrain === "Deathtraps") {
-
-        if (rng.randInt(140) === 0) {
-
-          stunUntil[i] = tick + 28;
-
-          positions[i] *= 0.82;
-
-          eventLog.push({
-            tick,
-            msg:
-              "💥 " +
-              currentRaceRiders[i].racer +
-              " hits a deathtrap!"
-          });
-
-        } else if (
-          rng.randInt(50) === 0
-        ) {
-
-          speed *= 0.55;
-
-          eventLog.push({
-            tick,
-            msg:
-              "☠ " +
-              currentRaceRiders[i].racer +
-              " struggles through traps"
-          });
-        }
-      }
-
-      /* ATTACK */
-
-      if (
-        currentRaceRiders[i].temperament ===
-        "Combative"
-      ) {
-
-        if (rng.randInt(110) === 0) {
-
-          let target = -1;
-          let best = Infinity;
-
-          for (let j = 0; j < currentRaceRiders.length; j++) {
-
-            if (j === i) continue;
-
-            const d =
-              Math.abs(
-                positions[j] -
-                positions[i]
-              );
-
-            if (d < best) {
-
-              best = d;
-              target = j;
-            }
-          }
-
-          if (target !== -1) {
-
-            stunUntil[target] =
-              tick + 10;
-
-            eventLog.push({
-              tick,
-              msg:
-                "⚔ " +
-                currentRaceRiders[i].racer +
-                " attacks " +
-                currentRaceRiders[target].racer
-            });
-          }
-        }
-      }
-
-      /* ACCELERATION */
-
-      const accel =
-        Math.min(
-          1,
-          positions[i] / 220 + 0.35
-        );
-
-      speed *= accel;
-
-      positions[i] += speed;
-
-      if (
-        positions[i] >= SIM_DISTANCE &&
-        winner === null
-      ) {
-        winner = i;
-      }
-    }
-
-    frames.push({
-      positions: [...positions]
-    });
-
-    if (winner !== null) {
-      break;
-    }
-  }
-
-  return {
-    frames,
-    winner,
-    eventLog
+  const slot = getSlot();
+  const pending = {
+    slot,
+    bet,
+    riderIndex: selectedBiker,
+    teamName: currentRaceRiders[selectedBiker].team,
+    racerName: currentRaceRiders[selectedBiker].racer
   };
+
+  localStorage.setItem("pendingBet", JSON.stringify(pending));
+  balance -= bet;
+  saveBalance();
+
+  showLockedBetUI(pending);
+  document.getElementById("lockBetBtn").disabled = true;
+  document.getElementById("bet").disabled = true;
+  showFundsMsg(`✅ Bet locked on ${pending.teamName}!`, "#44dd44");
+  document.getElementById("phaseBanner").className = "replay";
+  document.getElementById("phaseBanner").textContent = "BETS CLOSED";
 }
 
-/* =========================================
-   VISUAL REPLAY
-========================================= */
+function showLockedBetUI(pending) {
+  const el = document.getElementById("lockedBetDisplay");
+  el.style.display = "block";
+  el.innerHTML = `🔒 <strong>₹${pending.bet}</strong> on <strong>${pending.teamName}</strong> (${pending.racerName})<br>
+    <span style="color:#7a8baa;font-size:11px">Pays out at next race tick</span>`;
+}
 
-function playRace(data, bet) {
+// Stores payout info to be revealed only after replay finishes
+let pendingPayout = null;
 
-  const visualWidth =
-    document.querySelector(".track")
-      .clientWidth - 90;
+/* =============================================
+   PAYOUT: computed on slot change, revealed after replay
+============================================= */
 
+function computePendingBetOutcome(prevSeed, prevRiders) {
+  const raw = localStorage.getItem("pendingBet");
+  if (!raw) return;
+
+  let pending;
+  try { pending = JSON.parse(raw); } catch(e) { localStorage.removeItem("pendingBet"); return; }
+
+  const prevSlot = getSlot() - 1;
+  if (pending.slot !== prevSlot) return;
+
+  const data = simulateRace(prevSeed, prevRiders);
+  const winner = data.winner;
+  const winningTeam = prevRiders[winner]?.team;
+  const won = pending.teamName === winningTeam;
+
+  if (won) {
+    const winnings = pending.bet * 2;
+    balance += winnings;
+    saveBalance();
+    pendingPayout = { won: true, msg: `🏆 Your bet on ${pending.teamName} won! +₹${winnings}` };
+  } else {
+    pendingPayout = { won: false, msg: `💀 Your bet on ${pending.teamName} lost. -₹${pending.bet}` };
+  }
+
+  localStorage.removeItem("pendingBet");
+  document.getElementById("lockedBetDisplay").style.display = "none";
+}
+
+function revealPayoutIfPending() {
+  if (!pendingPayout) return;
+  showFundsMsg(pendingPayout.msg, pendingPayout.won ? "#44dd44" : "#ff6666");
+  pendingPayout = null;
+}
+
+/* =============================================
+   LOG
+============================================= */
+
+function logMessage(msg) {
+  const log = document.getElementById("log");
+  log.innerHTML += msg + "<br>";
+  log.scrollTop = log.scrollHeight;
+}
+
+/* =============================================
+   PLAY REPLAY (visual)
+============================================= */
+
+function resetReplayPositions(n) {
+  for (let i = 0; i < n; i++) {
+    const el = document.getElementById("bike" + i);
+    if (el) el.style.left = "0px";
+  }
+}
+
+function playStoredReplay() {
+  if (!replayData || replayPlaying) return;
+  replayPlaying = true;
+  document.getElementById("replayBtn").disabled = true;
+  document.getElementById("log").innerHTML = "";
+  document.getElementById("result").textContent = "";
+  resetReplayPositions(replayRaceRiders.length);
+
+  const visualWidth = document.querySelector(".track").clientWidth - 90;
   let frameIndex = 0;
 
-  const result =
-    document.getElementById("result");
-
-  result.textContent = "";
-
-  document.getElementById("log").innerHTML = "";
-
   function renderFrame() {
-
-    if (frameIndex >= data.frames.length) {
-
-      const winner = data.winner;
-
-      if (winner === selected) {
-
-        const winnings = bet * 2;
-
-        balance += winnings;
-
-        saveBalance();
-
-        result.textContent =
-          "🏆 Winner: " +
-          currentRaceRiders[winner].racer +
-          " — Won ₹" + winnings;
-
-      } else {
-
-        result.textContent =
-          "💀 Winner: " +
-          currentRaceRiders[winner].racer +
-          " — Lost ₹" + bet;
-      }
-
-      applyCooldownUI();
-
+    if (frameIndex >= replayData.frames.length) {
+      const winner = replayData.winner;
+      const winnerName = replayRaceRiders[winner]?.racer ?? "Unknown";
+      document.getElementById("result").textContent = `🏆 Winner: ${winnerName}`;
+      document.getElementById("replayBtn").disabled = false;
+      replayPlaying = false;
+      // Now safe to reveal the bet outcome — race is over
+      revealPayoutIfPending();
       return;
     }
 
-    const frame =
-      data.frames[frameIndex];
-
-    /* POSITIONS */
-
-    for (let i = 0; i < currentRaceRiders.length; i++) {
-
-      const renderX =
-        (frame.positions[i] / SIM_DISTANCE)
-        * visualWidth;
-
-      document.getElementById("bike" + i)
-        .style.left = renderX + "px";
+    const frame = replayData.frames[frameIndex];
+    for (let i = 0; i < replayRaceRiders.length; i++) {
+      const el = document.getElementById("bike" + i);
+      if (el) el.style.left = ((frame.positions[i] / SIM_DISTANCE) * visualWidth) + "px";
     }
 
-    /* EVENTS */
-
-    data.eventLog
+    replayData.eventLog
       .filter(e => e.tick === frameIndex)
       .forEach(e => logMessage(e.msg));
 
     frameIndex++;
-
-    setTimeout(() => {
-      requestAnimationFrame(renderFrame);
-    }, FRAME_MS);
+    setTimeout(() => requestAnimationFrame(renderFrame), FRAME_MS);
   }
 
   renderFrame();
 }
 
-/* =========================================
-   START RACE
-========================================= */
+/* =============================================
+   COUNTDOWN TICKER
+============================================= */
 
-function startRace() {
+function updateCountdown() {
+  const remaining = Math.max(0, getNextSlotTime() - Date.now());
+  const el = document.getElementById("countdown");
+  if (remaining === 0) {
+    el.textContent = "⚡ New race starting — refresh the page now!";
+    el.style.color = "#ff6644";
+  } else {
+    el.style.color = "#ffd166";
+    const mins = Math.floor(remaining / 60000);
+    const secs = Math.floor((remaining % 60000) / 1000);
+    el.textContent = `Next race in ${mins}:${String(secs).padStart(2,"0")}`;
+  }
+}
 
-  if (racing) {
-    return;
+/* =============================================
+   SLOT TRANSITION — called when slot changes
+============================================= */
+
+let lastKnownSlot = null;
+
+function checkSlotTransition() {
+  const slot = getSlot();
+  if (lastKnownSlot !== null && slot !== lastKnownSlot) {
+    handleSlotChange(slot);
+  }
+  lastKnownSlot = slot;
+}
+
+function handleSlotChange(newSlot) {
+  const prevSlot = newSlot - 1;
+  const prevSeed = getSeedForSlot(prevSlot);
+  const currSeed = getSeedForSlot(newSlot);
+
+  // Compute payout for any pending bet — revealed after replay
+  const prevRiders = generateRoster(prevSeed);
+  computePendingBetOutcome(prevSeed, prevRiders);
+
+  // Re-init with new slot
+  setupForSlot(newSlot);
+}
+
+/* =============================================
+   SETUP FOR A GIVEN SLOT
+============================================= */
+
+function setupForSlot(slot) {
+  const currSeed = getSeedForSlot(slot);
+  const prevSlot = slot - 1;
+  const prevSeed = getSeedForSlot(prevSlot);
+
+  // --- UPCOMING (current slot) ---
+  currentRaceRiders = generateRoster(currSeed);
+  upcomingCourse    = generateCourse(currSeed);
+
+  document.getElementById("upcomingSeedLabel").textContent = currSeed;
+  document.getElementById("phaseBanner").className = "betting";
+  document.getElementById("phaseBanner").textContent = "BETTING OPEN";
+
+  buildBikeButtons(currentRaceRiders);
+  setTimeout(() => renderSegments("upcomingTrack", upcomingCourse, 30), 60);
+
+  // Reset bet UI
+  selectedBiker = null;
+  document.getElementById("lockBetBtn").disabled = false;
+  document.getElementById("bet").disabled = false;
+  document.getElementById("lockedBetDisplay").style.display = "none";
+
+  // If there's still a pending bet for the CURRENT slot, restore UI
+  const raw = localStorage.getItem("pendingBet");
+  if (raw) {
+    try {
+      const pending = JSON.parse(raw);
+      if (pending.slot === slot) {
+        // find the matching rider index
+        const idx = currentRaceRiders.findIndex(r => r.team === pending.teamName);
+        if (idx !== -1) { selectedBiker = idx; }
+        showLockedBetUI(pending);
+        document.getElementById("lockBetBtn").disabled = true;
+        document.getElementById("bet").disabled = true;
+      }
+    } catch(e) {}
   }
 
-  if (selected === null) {
-    return;
+  // --- REPLAY (previous slot) ---
+  replayRaceRiders = generateRoster(prevSeed);
+  const replayCourse = generateCourse(prevSeed);
+  replayData = simulateRace(prevSeed, replayRaceRiders);
+
+  document.getElementById("replaySeedLabel").textContent = prevSeed;
+  document.getElementById("result").textContent = "";
+  document.getElementById("log").innerHTML = "";
+
+  buildReplayTrack(replayRaceRiders, replayCourse);
+  document.getElementById("replayBtn").disabled = false;
+  replayPlaying = false;
+}
+
+/* =============================================
+   INIT
+============================================= */
+
+function init() {
+  // Poverty recovery
+  if (balance <= 0) {
+    balance = 2;
+    saveBalance();
+    setTimeout(() => logMessage("Penniless, you scrape together ₹2 from mercenary work"), 50);
   }
 
   const slot = getSlot();
+  lastKnownSlot = slot;
+  setupForSlot(slot);
 
-  const msgEl = document.getElementById("fundsMessage");
-  if (msgEl) msgEl.textContent = "";
-
-  /* LOCK */
-  if (slot === lastBetSlot) {
-    applyCooldownUI();
-    return;
+  // Settle any unresolved bet from a PREVIOUS slot that was missed
+  const raw = localStorage.getItem("pendingBet");
+  if (raw) {
+    try {
+      const pending = JSON.parse(raw);
+      if (pending.slot < slot) {
+        // missed — settle immediately (no replay to wait for)
+        const betSeed    = getSeedForSlot(pending.slot);
+        const betRiders  = generateRoster(betSeed);
+        // Use prevSlot trick: temporarily adjust so compute function matches
+        const missedSlot = pending.slot;
+        const missedData = simulateRace(betSeed, betRiders);
+        const winner     = missedData.winner;
+        const winningTeam = betRiders[winner]?.team;
+        const won = pending.teamName === winningTeam;
+        if (won) {
+          const winnings = pending.bet * 2;
+          balance += winnings;
+          saveBalance();
+          setTimeout(() => showFundsMsg(`🏆 Missed race settled: ${pending.teamName} won! +₹${winnings}`, "#44dd44"), 200);
+        } else {
+          setTimeout(() => showFundsMsg(`💀 Missed race settled: ${pending.teamName} lost. -₹${pending.bet}`, "#ff6666"), 200);
+        }
+        localStorage.removeItem("pendingBet");
+        document.getElementById("lockedBetDisplay").style.display = "none";
+      }
+    } catch(e) { localStorage.removeItem("pendingBet"); }
   }
 
-  const bet =
-    parseInt(document.getElementById("bet").value);
+  // Timers
+  setInterval(updateCountdown, 1000);
+  setInterval(checkSlotTransition, 3000);
+  updateCountdown();
 
-  /* VALIDATION */
-  if (!bet || bet <= 0) {
-    if (msgEl) msgEl.textContent = "Enter a valid bet amount";
-    return;
-  }
-
-  if (bet > balance) {
-    if (msgEl) msgEl.textContent = "❌ Insufficient funds";
-    return;
-  }
-
-  const seed =
-    getSeedForSlot(slot);
-
-  /* SAME SHARED RACE */
-  generateCourse(seed);
-  currentRaceData = simulateRace(seed);
-
-  /* LOCK SLOT */
-  lastBetSlot = slot;
-
-  localStorage.setItem("lastBetSlot", lastBetSlot);
-
-  balance -= bet;
-  saveBalance();
-
-  resetPositions();
-  setRaceState(true);
-
-  playRace(currentRaceData, bet);
+  window.addEventListener("resize", () => {
+    setTimeout(() => renderSegments("upcomingTrack", upcomingCourse, 30), 30);
+  });
 }
 
-/* =========================================
-   INIT
-========================================= */
-
-/* POVERTY RECOVERY */
-
-if (balance <= 0) {
-
-  balance = 2;
-  saveBalance();
-
-  setTimeout(() => {
-    logMessage("Penniless, you do some mercenary work and earn ₹2");
-  }, 50);
-}
-
-const initSlot = getSlot();
-const initSeed = getSeedForSlot(initSlot);
-
-document.getElementById("seedDisplay").textContent = initSeed;
-
-/* LOAD CSV FIRST */
 loadCSVFromFile();
-
-if (initSlot === lastBetSlot) {
-  applyCooldownUI();
-}
-
-window.addEventListener("resize", renderTrackSegments);
 </script>
-
 </body>
 </html>
